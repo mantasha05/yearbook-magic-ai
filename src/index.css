@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Dancing+Script:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -66,6 +66,20 @@
     --shadow-lg: 0 16px 48px -8px hsl(235 30% 12% / 0.15);
     --shadow-gold: 0 8px 24px -4px hsl(38 92% 50% / 0.3);
     --shadow-primary: 0 8px 24px -4px hsl(235 65% 45% / 0.3);
+
+    /* Pastel palette */
+    --pastel-pink: 340 80% 85%;
+    --pastel-lavender: 270 60% 85%;
+    --pastel-cream: 40 60% 94%;
+    --pastel-rose: 350 70% 78%;
+    --pastel-blush: 10 70% 90%;
+    --pastel-gold-frame: 42 70% 75%;
+
+    /* Pastel gradients */
+    --gradient-pastel: linear-gradient(135deg, hsl(340 80% 85%), hsl(270 60% 85%), hsl(40 60% 94%));
+    --gradient-pastel-warm: linear-gradient(160deg, hsl(350 70% 78% / 0.3), hsl(40 60% 94% / 0.5));
+    --shadow-pastel: 0 8px 32px -4px hsl(340 80% 85% / 0.4);
+    --shadow-pastel-lg: 0 16px 48px -8px hsl(270 60% 85% / 0.35);
   }
 
   .dark {
@@ -162,5 +176,21 @@
 
   .glass {
     @apply backdrop-blur-xl bg-gradient-glass border border-border/50;
+  }
+
+  .shadow-pastel {
+    box-shadow: var(--shadow-pastel);
+  }
+
+  .shadow-pastel-lg {
+    box-shadow: var(--shadow-pastel-lg);
+  }
+
+  .bg-gradient-pastel {
+    background-image: var(--gradient-pastel);
+  }
+
+  .bg-gradient-pastel-warm {
+    background-image: var(--gradient-pastel-warm);
   }
 }

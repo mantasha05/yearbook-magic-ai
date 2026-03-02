@@ -17,6 +17,7 @@ export default {
         display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
         body: ['"DM Sans"', 'system-ui', 'sans-serif'],
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
+        cursive: ['"Dancing Script"', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -63,6 +64,14 @@ export default {
           dark: "hsl(var(--indigo-dark))",
         },
         navy: "hsl(var(--navy))",
+        pastel: {
+          pink: "hsl(var(--pastel-pink))",
+          lavender: "hsl(var(--pastel-lavender))",
+          cream: "hsl(var(--pastel-cream))",
+          rose: "hsl(var(--pastel-rose))",
+          blush: "hsl(var(--pastel-blush))",
+          "gold-frame": "hsl(var(--pastel-gold-frame))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

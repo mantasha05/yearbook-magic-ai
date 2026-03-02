@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion, Reorder } from "framer-motion";
 import {
   ArrowLeft,
-  ArrowRight,
   GripVertical,
   Plus,
   MessageSquare,
@@ -13,40 +12,66 @@ import {
   QrCode,
   Trash2,
   Sparkles,
+  Save,
+  Loader2,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
+import { useProject, type ProjectSection } from "@/hooks/use-project";
+import { toast } from "@/hooks/use-toast";
 
-interface Section {
-  id: string;
-  title: string;
-  icon: React.ElementType;
-  enabled: boolean;
-}
-
-const defaultSections: Section[] = [
-  { id: "principal", title: "Principal's Message", icon: MessageSquare, enabled: true },
-  { id: "toppers", title: "Academic Stars & Toppers", icon: Award, enabled: true },
-  { id: "events", title: "Events Gallery", icon: Camera, enabled: true },
-  { id: "memes", title: "Fun Memes & Candid Moments", icon: Laugh, enabled: true },
-  { id: "farewell", title: "Farewell & Memories", icon: Heart, enabled: true },
-  { id: "qr", title: "QR Code - College Anthem", icon: QrCode, enabled: true },
-];
+const ICON_MAP: Record<string, React.ElementType> = {
+  MessageSquare,
+  Award,
+  Camera,
+  Laugh,
+  Heart,
+  QrCode,
+};
 
 const SectionBuilder = () => {
   const navigate = useNavigate();
-  const [sections, setSections] = useState<Section[]>(defaultSections);
+  const { project, sections, loading, toggleSection, reorderSections, removeSection, saveSections } = useProject();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
 
-  const toggleSection = (id: string) => {
-    setSections((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s))
+  const handleReorder = (newOrder: ProjectSection[]) => {
+    // Debounced auto-save
+    reorderSections(newOrder);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      toast({ title: "Order saved", description: "Section order updated automatically" });
+    }, 1000);
+  };
+
+  const handleGenerate = () => {
+    const enabledSections = sections.filter((s) => s.enabled);
+    if (enabledSections.length === 0) {
+      toast({
+        title: "No sections enabled",
+        description: "Please enable at least one section before generating.",
+        variant: "destructive",
+      });
+      return;
+    }
+    navigate("/generate");
+  };
+
+  const handleSave = () => {
+    saveSections(sections);
+    toast({ title: "Project saved!", description: "All sections and settings have been saved." });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex items-center justify-center pt-40">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </div>
     );
-  };
-
-  const removeSection = (id: string) => {
-    setSections((prev) => prev.filter((s) => s.id !== id));
-  };
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,66 +100,69 @@ const SectionBuilder = () => {
             <Reorder.Group
               axis="y"
               values={sections}
-              onReorder={setSections}
+              onReorder={handleReorder}
               className="space-y-3"
             >
-              {sections.map((section) => (
-                <Reorder.Item
-                  key={section.id}
-                  value={section}
-                  className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-grab active:cursor-grabbing ${
-                    section.enabled
-                      ? "bg-card border-border shadow-card hover:shadow-card-hover"
-                      : "bg-muted/50 border-border/50 opacity-60"
-                  }`}
-                >
-                  <GripVertical className="w-5 h-5 text-muted-foreground shrink-0" />
-
-                  <div
-                    className={`flex-1 flex items-center gap-3 cursor-pointer ${
-                      section.enabled ? "" : "pointer-events-none"
-                    }`}
-                    onClick={() => section.enabled && navigate(`/sections/${section.id}`)}
-                  >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                      section.enabled ? "bg-gradient-hero" : "bg-muted"
-                    }`}>
-                      <section.icon className={`w-5 h-5 ${
-                        section.enabled ? "text-primary-foreground" : "text-muted-foreground"
-                      }`} />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <span className={`font-display font-medium block ${
-                        section.enabled ? "text-foreground" : "text-muted-foreground"
-                      }`}>
-                        {section.title}
-                      </span>
-                      {section.enabled && (
-                        <span className="text-xs text-muted-foreground">Click to edit →</span>
-                      )}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={(e) => { e.stopPropagation(); toggleSection(section.id); }}
-                    className={`px-3 py-1 rounded-md text-xs font-display font-semibold transition-colors ${
+              {sections.map((section) => {
+                const Icon = ICON_MAP[section.icon_name] || MessageSquare;
+                return (
+                  <Reorder.Item
+                    key={section.id}
+                    value={section}
+                    className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-grab active:cursor-grabbing ${
                       section.enabled
-                        ? "bg-primary/10 text-primary"
-                        : "bg-muted text-muted-foreground"
+                        ? "bg-card border-border shadow-card hover:shadow-card-hover"
+                        : "bg-muted/50 border-border/50 opacity-60"
                     }`}
                   >
-                    {section.enabled ? "ON" : "OFF"}
-                  </button>
+                    <GripVertical className="w-5 h-5 text-muted-foreground shrink-0" />
 
-                  <button
-                    onClick={(e) => { e.stopPropagation(); removeSection(section.id); }}
-                    className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </Reorder.Item>
-              ))}
+                    <div
+                      className={`flex-1 flex items-center gap-3 cursor-pointer ${
+                        section.enabled ? "" : "pointer-events-none"
+                      }`}
+                      onClick={() => section.enabled && navigate(`/sections/${section.section_key}`)}
+                    >
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                        section.enabled ? "bg-gradient-hero" : "bg-muted"
+                      }`}>
+                        <Icon className={`w-5 h-5 ${
+                          section.enabled ? "text-primary-foreground" : "text-muted-foreground"
+                        }`} />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <span className={`font-display font-medium block ${
+                          section.enabled ? "text-foreground" : "text-muted-foreground"
+                        }`}>
+                          {section.title}
+                        </span>
+                        {section.enabled && (
+                          <span className="text-xs text-muted-foreground">Click to edit →</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggleSection(section.section_key); }}
+                      className={`px-3 py-1 rounded-md text-xs font-display font-semibold transition-colors ${
+                        section.enabled
+                          ? "bg-primary/10 text-primary"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {section.enabled ? "ON" : "OFF"}
+                    </button>
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); removeSection(section.id); }}
+                      className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </Reorder.Item>
+                );
+              })}
             </Reorder.Group>
 
             {/* Add custom section */}
@@ -143,12 +171,22 @@ const SectionBuilder = () => {
               <span className="font-display font-medium">Add Custom Section</span>
             </button>
 
-            {/* Continue */}
-            <div className="flex justify-end mt-10">
+            {/* Actions */}
+            <div className="flex items-center justify-between mt-10 gap-4">
+              <Button
+                variant="outline"
+                size="lg"
+                className="font-display h-12 px-6"
+                onClick={handleSave}
+              >
+                <Save className="w-5 h-5 mr-2" />
+                Save Project
+              </Button>
+
               <Button
                 size="lg"
                 className="bg-gradient-gold shadow-gold-glow hover:opacity-90 text-accent-foreground font-display font-semibold h-12 px-8"
-                onClick={() => navigate("/dashboard")}
+                onClick={handleGenerate}
               >
                 Generate Yearbook
                 <Sparkles className="w-5 h-5 ml-2" />

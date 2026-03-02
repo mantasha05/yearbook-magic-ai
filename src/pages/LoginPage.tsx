@@ -51,7 +51,13 @@ const LoginPage = () => {
         navigate("/dashboard");
       }
     } catch (err: any) {
-      toast({ title: "Authentication failed", description: err.message, variant: "destructive" });
+      let msg = err.message;
+      if (msg?.includes("Invalid login credentials")) {
+        msg = "Invalid email or password. If you just signed up, try again.";
+      } else if (msg?.includes("Email not confirmed")) {
+        msg = "Your email hasn't been confirmed. Please try signing up again.";
+      }
+      toast({ title: isSignUp ? "Sign up failed" : "Login failed", description: msg, variant: "destructive" });
     } finally {
       setLoading(false);
     }

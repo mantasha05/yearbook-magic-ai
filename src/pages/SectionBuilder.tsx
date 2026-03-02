@@ -84,28 +84,40 @@ const SectionBuilder = () => {
                   value={section}
                   className={`flex items-center gap-3 p-4 rounded-xl border transition-all cursor-grab active:cursor-grabbing ${
                     section.enabled
-                      ? "bg-card border-border shadow-card"
+                      ? "bg-card border-border shadow-card hover:shadow-card-hover"
                       : "bg-muted/50 border-border/50 opacity-60"
                   }`}
                 >
                   <GripVertical className="w-5 h-5 text-muted-foreground shrink-0" />
 
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
-                    section.enabled ? "bg-gradient-hero" : "bg-muted"
-                  }`}>
-                    <section.icon className={`w-5 h-5 ${
-                      section.enabled ? "text-primary-foreground" : "text-muted-foreground"
-                    }`} />
+                  <div
+                    className={`flex-1 flex items-center gap-3 cursor-pointer ${
+                      section.enabled ? "" : "pointer-events-none"
+                    }`}
+                    onClick={() => section.enabled && navigate(`/sections/${section.id}`)}
+                  >
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                      section.enabled ? "bg-gradient-hero" : "bg-muted"
+                    }`}>
+                      <section.icon className={`w-5 h-5 ${
+                        section.enabled ? "text-primary-foreground" : "text-muted-foreground"
+                      }`} />
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <span className={`font-display font-medium block ${
+                        section.enabled ? "text-foreground" : "text-muted-foreground"
+                      }`}>
+                        {section.title}
+                      </span>
+                      {section.enabled && (
+                        <span className="text-xs text-muted-foreground">Click to edit →</span>
+                      )}
+                    </div>
                   </div>
 
-                  <span className={`flex-1 font-display font-medium ${
-                    section.enabled ? "text-foreground" : "text-muted-foreground"
-                  }`}>
-                    {section.title}
-                  </span>
-
                   <button
-                    onClick={() => toggleSection(section.id)}
+                    onClick={(e) => { e.stopPropagation(); toggleSection(section.id); }}
                     className={`px-3 py-1 rounded-md text-xs font-display font-semibold transition-colors ${
                       section.enabled
                         ? "bg-primary/10 text-primary"
@@ -116,7 +128,7 @@ const SectionBuilder = () => {
                   </button>
 
                   <button
-                    onClick={() => removeSection(section.id)}
+                    onClick={(e) => { e.stopPropagation(); removeSection(section.id); }}
                     className="p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />

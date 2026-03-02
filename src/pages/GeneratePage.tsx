@@ -12,6 +12,7 @@ import {
   Sparkles,
   Star,
   Palette,
+  Heart,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
@@ -149,22 +150,27 @@ const GeneratePage = () => {
             ${page.content?.anthemUrl ? `<p style="margin-top:16px;color:#888;font-size:14px;">🎵 College Anthem: ${page.content.anthemUrl}</p>` : ""}
           </div>`;
       }
-      // Gallery
+      // Gallery — pastel editorial style for PDF
       return `
-        <div style="page-break-after:always;padding:40px 60px;font-family:'Space Grotesk',sans-serif;">
-          <div style="text-align:center;margin-bottom:32px;position:relative;">
-            <div style="display:inline-block;position:relative;">
-              <h2 style="font-size:32px;color:${template.accent};margin:0;">${page.title}</h2>
-              <div style="height:3px;background:${template.accent};margin-top:8px;border-radius:4px;"></div>
+        <div style="page-break-after:always;padding:40px 50px;font-family:'Space Grotesk',sans-serif;background:linear-gradient(160deg, #fce4ec22, #e8eaf622, #fff8e122);">
+          <div style="text-align:center;margin-bottom:36px;">
+            <h2 style="font-family:'Dancing Script',cursive;font-size:38px;color:${template.accent};margin:0;">${page.title}</h2>
+            <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
+              <div style="width:40px;height:1px;background:${template.accent};opacity:0.4;"></div>
+              <span style="color:${template.accent};font-size:12px;">💕</span>
+              <div style="width:40px;height:1px;background:${template.accent};opacity:0.4;"></div>
             </div>
           </div>
           <div style="column-count:2;column-gap:28px;">
             ${page.images.map((img, idx) => `
-              <div style="break-inside:avoid;margin-bottom:24px;background:white;border-radius:16px;padding:12px 12px 16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);transform:rotate(${idx % 2 === 0 ? '-1' : '1'}deg);">
-                <img src="${img.public_url}" style="width:100%;border-radius:12px;object-fit:cover;aspect-ratio:${idx % 3 === 0 ? '3/4' : '4/3'};" />
-                ${img.caption ? `<div style="padding:12px 4px 0;text-align:center;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:15px;color:#444;line-height:1.6;letter-spacing:0.3px;">"${img.caption}"</div>` : ""}
+              <div style="break-inside:avoid;margin-bottom:28px;background:white;border-radius:18px;padding:6px;box-shadow:0 6px 28px rgba(206,147,216,0.2),0 2px 8px rgba(0,0,0,0.05);border:1.5px solid rgba(206,147,216,0.15);transform:rotate(${idx % 3 === 0 ? '-1.2' : idx % 3 === 1 ? '0.8' : '0'}deg);">
+                <img src="${img.public_url}" style="width:100%;border-radius:14px;object-fit:cover;aspect-ratio:${idx % 3 === 0 ? '3/4' : '4/3'};" />
+                ${img.caption ? `<div style="padding:14px 8px 8px;text-align:center;font-family:'Dancing Script',cursive;font-size:18px;color:#ad6b8d;line-height:1.5;letter-spacing:0.3px;">${img.caption} 💕</div>` : ""}
               </div>
             `).join("")}
+          </div>
+          <div style="text-align:center;margin-top:20px;font-family:'Dancing Script',cursive;font-size:22px;color:#ce93d8;opacity:0.6;">
+            ✨ Memories that make the heart smile ✨
           </div>
         </div>`;
     }).join("");
@@ -318,7 +324,7 @@ const GeneratePage = () => {
                     <span className="text-xs text-white/60 font-display">Page {currentPage + 1} of {pages.length}</span>
                   </div>
 
-                  <div className="p-6 min-h-[420px]">
+                  <div className="p-6 min-h-[480px] bg-gradient-to-br from-pastel-cream/30 via-white to-pastel-pink/10">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={currentPage}
@@ -359,36 +365,138 @@ const GeneratePage = () => {
                           </div>
                         )}
 
-                        {/* Gallery type page */}
+                        {/* Gallery type page — dreamy pastel collage */}
                         {pages[currentPage]?.type === "gallery" && (
-                          <div className="columns-1 sm:columns-2 gap-5 space-y-5">
-                            {pages[currentPage]?.images.map((img, idx) => (
-                              <motion.div
-                                key={img.id}
-                                initial={{ opacity: 0, y: 30, rotate: idx % 2 === 0 ? -1.5 : 1.5 }}
-                                animate={{ opacity: 1, y: 0, rotate: idx % 2 === 0 ? -1 : 1 }}
-                                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                                className="break-inside-avoid group"
-                              >
-                                <div className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-500 hover:-translate-y-1 border border-border/50 p-3 pb-4">
-                                  <div className="rounded-xl overflow-hidden">
-                                    <img
-                                      src={img.public_url}
-                                      alt={img.file_name}
-                                      className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                      style={{ aspectRatio: idx % 3 === 0 ? '3/4' : '4/3' }}
-                                    />
-                                  </div>
-                                  {img.caption && (
-                                    <div className="pt-3 px-1">
-                                      <p className="font-serif text-base sm:text-lg italic text-foreground/80 leading-relaxed tracking-wide text-center">
-                                        "{img.caption}"
-                                      </p>
-                                    </div>
+                          <div className="relative">
+                            {/* Floating decorative elements */}
+                            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                              {[...Array(6)].map((_, i) => (
+                                <motion.div
+                                  key={`sparkle-${i}`}
+                                  className="absolute"
+                                  style={{
+                                    top: `${15 + (i * 15) % 70}%`,
+                                    left: `${5 + (i * 18) % 90}%`,
+                                  }}
+                                  animate={{
+                                    y: [0, -8, 0],
+                                    opacity: [0.3, 0.7, 0.3],
+                                    scale: [0.8, 1.1, 0.8],
+                                  }}
+                                  transition={{
+                                    duration: 3 + i * 0.5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: i * 0.4,
+                                  }}
+                                >
+                                  {i % 3 === 0 ? (
+                                    <Heart className="w-3 h-3 text-pastel-rose/60 fill-pastel-rose/30" />
+                                  ) : i % 3 === 1 ? (
+                                    <Sparkles className="w-3 h-3 text-pastel-lavender/60" />
+                                  ) : (
+                                    <Star className="w-2.5 h-2.5 text-pastel-gold-frame/60 fill-pastel-gold-frame/30" />
                                   )}
+                                </motion.div>
+                              ))}
+                            </div>
+
+                            {/* Asymmetrical collage grid */}
+                            <div className="relative grid gap-4" style={{
+                              gridTemplateColumns: 'repeat(12, 1fr)',
+                              gridAutoRows: '60px',
+                            }}>
+                              {pages[currentPage]?.images.map((img, idx) => {
+                                // Asymmetric placement patterns
+                                const layouts = [
+                                  { col: '1 / 8', row: 'span 5' },
+                                  { col: '8 / 13', row: 'span 4' },
+                                  { col: '1 / 6', row: 'span 4' },
+                                  { col: '5 / 13', row: 'span 5' },
+                                  { col: '1 / 7', row: 'span 4' },
+                                  { col: '7 / 13', row: 'span 5' },
+                                  { col: '2 / 12', row: 'span 4' },
+                                  { col: '1 / 8', row: 'span 5' },
+                                ];
+                                const layout = layouts[idx % layouts.length];
+
+                                return (
+                                  <motion.div
+                                    key={img.id}
+                                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    transition={{
+                                      duration: 0.6,
+                                      delay: idx * 0.12,
+                                      ease: [0.25, 0.46, 0.45, 0.94],
+                                    }}
+                                    className="group relative"
+                                    style={{
+                                      gridColumn: layout.col,
+                                      gridRow: layout.row,
+                                      zIndex: idx % 2 === 0 ? 2 : 1,
+                                    }}
+                                  >
+                                    {/* Gold/white thin frame with pastel shadow */}
+                                    <div className="relative h-full rounded-2xl p-[3px] bg-gradient-to-br from-pastel-gold-frame/60 via-white to-pastel-pink/40 shadow-pastel hover:shadow-pastel-lg transition-all duration-700 ease-out hover:-translate-y-1.5 hover:rotate-0"
+                                      style={{ transform: `rotate(${idx % 3 === 0 ? -1.5 : idx % 3 === 1 ? 1 : -0.5}deg)` }}
+                                    >
+                                      <div className="relative h-full rounded-[14px] overflow-hidden bg-white p-1.5">
+                                        <img
+                                          src={img.public_url}
+                                          alt={img.file_name}
+                                          className="w-full h-full object-cover rounded-xl group-hover:scale-[1.04] transition-transform duration-700 ease-out"
+                                        />
+
+                                        {/* Soft gradient overlay on hover */}
+                                        <div className="absolute inset-1.5 rounded-xl bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                      </div>
+                                    </div>
+
+                                    {/* Caption below the frame */}
+                                    {img.caption && (
+                                      <motion.div
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: idx * 0.12 + 0.3 }}
+                                        className="absolute -bottom-8 left-2 right-2 text-center z-10"
+                                      >
+                                        <p className="font-cursive text-lg sm:text-xl text-pastel-rose drop-shadow-sm leading-snug">
+                                          {img.caption} 💕
+                                        </p>
+                                      </motion.div>
+                                    )}
+                                  </motion.div>
+                                );
+                              })}
+                            </div>
+
+                            {/* Central overlay message */}
+                            {pages[currentPage]?.images.length > 0 && (
+                              <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                                className="flex justify-center mt-12 pt-4"
+                              >
+                                <div className="relative px-8 py-4">
+                                  <p className="font-cursive text-2xl sm:text-3xl text-pastel-rose text-center leading-relaxed drop-shadow-md">
+                                    Memories that make the heart smile 💕
+                                  </p>
+                                  <div className="flex justify-center gap-2 mt-2">
+                                    {[...Array(3)].map((_, i) => (
+                                      <motion.span
+                                        key={i}
+                                        animate={{ y: [0, -4, 0], opacity: [0.5, 1, 0.5] }}
+                                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                                      >
+                                        <Heart className="w-3 h-3 text-pastel-rose/50 fill-pastel-rose/30" />
+                                      </motion.span>
+                                    ))}
+                                  </div>
                                 </div>
                               </motion.div>
-                            ))}
+                            )}
                           </div>
                         )}
                       </motion.div>

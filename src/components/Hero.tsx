@@ -60,7 +60,7 @@ const Hero = () => {
                 className="bg-gradient-gold shadow-gold-glow hover:opacity-90 text-accent-foreground font-display font-semibold text-base h-12 px-8"
                 asChild
               >
-                <Link to="/dashboard">
+                <Link to="/login">
                   Create Your Yearbook
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>

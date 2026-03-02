@@ -70,7 +70,7 @@ const FeatureGrid = () => {
             <span className="text-gradient-hero">Stunning Yearbook</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From bulk uploads to AI-powered layouts — YearGen handles the heavy lifting so you can focus on the memories.
+            From bulk uploads to AI-powered layouts — Memorie handles the heavy lifting so you can focus on the memories.
           </p>
         </motion.div>
 

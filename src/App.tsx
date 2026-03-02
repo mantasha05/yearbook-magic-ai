@@ -12,6 +12,7 @@ import UploadPage from "./pages/UploadPage";
 import TemplatesPage from "./pages/TemplatesPage";
 import SectionBuilder from "./pages/SectionBuilder";
 import SectionEditor from "./pages/SectionEditor";
+import GeneratePage from "./pages/GeneratePage";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/templates" element={<ProtectedRoute><TemplatesPage /></ProtectedRoute>} />
             <Route path="/sections" element={<ProtectedRoute><SectionBuilder /></ProtectedRoute>} />
             <Route path="/sections/:sectionId" element={<ProtectedRoute><SectionEditor /></ProtectedRoute>} />
+            <Route path="/generate" element={<ProtectedRoute><GeneratePage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

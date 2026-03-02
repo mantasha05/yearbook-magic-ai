@@ -3,33 +3,39 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CreateProject from "./pages/CreateProject";
 import UploadPage from "./pages/UploadPage";
 import TemplatesPage from "./pages/TemplatesPage";
 import SectionBuilder from "./pages/SectionBuilder";
+import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/create" element={<CreateProject />} />
-          <Route path="/upload" element={<UploadPage />} />
-          <Route path="/templates" element={<TemplatesPage />} />
-          <Route path="/sections" element={<SectionBuilder />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/create" element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
+            <Route path="/upload" element={<ProtectedRoute><UploadPage /></ProtectedRoute>} />
+            <Route path="/templates" element={<ProtectedRoute><TemplatesPage /></ProtectedRoute>} />
+            <Route path="/sections" element={<ProtectedRoute><SectionBuilder /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

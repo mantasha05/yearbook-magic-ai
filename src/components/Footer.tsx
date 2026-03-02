@@ -11,7 +11,7 @@ const Footer = () => {
               <BookOpen className="w-4 h-4 text-primary-foreground" />
             </div>
             <span className="font-display font-bold text-lg text-foreground">
-              Year<span className="text-gradient-gold">Gen</span>
+              Memo<span className="text-gradient-gold">rie</span>
             </span>
           </Link>
 

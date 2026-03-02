@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BookOpen, Menu, X } from "lucide-react";
+import { BookOpen, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "Features", href: "/#features" },
@@ -13,6 +14,11 @@ const navItems = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <motion.nav
@@ -27,7 +33,7 @@ const Navbar = () => {
             <BookOpen className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="font-display font-bold text-xl tracking-tight text-foreground">
-            Year<span className="text-gradient-gold">Gen</span>
+            Memo<span className="text-gradient-gold">rie</span>
           </span>
         </Link>
 
@@ -49,12 +55,26 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/login">Log in</Link>
-          </Button>
-          <Button size="sm" className="bg-gradient-hero shadow-primary-glow hover:opacity-90 text-primary-foreground" asChild>
-            <Link to="/dashboard">Get Started Free</Link>
-          </Button>
+          {user ? (
+            <>
+              <span className="text-sm text-muted-foreground truncate max-w-[160px]">
+                {user.email}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 mr-1" />
+                Log out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/login">Log in</Link>
+              </Button>
+              <Button size="sm" className="bg-gradient-hero shadow-primary-glow hover:opacity-90 text-primary-foreground" asChild>
+                <Link to="/login">Get Started Free</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -86,12 +106,21 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex gap-3 pt-2 border-t border-border">
-              <Button variant="ghost" size="sm" className="flex-1" asChild>
-                <Link to="/login">Log in</Link>
-              </Button>
-              <Button size="sm" className="flex-1 bg-gradient-hero text-primary-foreground" asChild>
-                <Link to="/dashboard">Get Started</Link>
-              </Button>
+              {user ? (
+                <Button variant="ghost" size="sm" className="flex-1" onClick={handleSignOut}>
+                  <LogOut className="w-4 h-4 mr-1" />
+                  Log out
+                </Button>
+              ) : (
+                <>
+                  <Button variant="ghost" size="sm" className="flex-1" asChild>
+                    <Link to="/login">Log in</Link>
+                  </Button>
+                  <Button size="sm" className="flex-1 bg-gradient-hero text-primary-foreground" asChild>
+                    <Link to="/login">Get Started</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </motion.div>

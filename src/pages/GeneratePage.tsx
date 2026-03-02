@@ -158,11 +158,11 @@ const GeneratePage = () => {
               <div style="height:3px;background:${template.accent};margin-top:8px;border-radius:4px;"></div>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px;">
-            ${page.images.map((img) => `
-              <div style="break-inside:avoid;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);background:white;">
-                <img src="${img.public_url}" style="width:100%;aspect-ratio:4/3;object-fit:cover;" />
-                ${img.caption ? `<div style="padding:12px 16px;font-size:13px;color:#555;border-top:1px solid #eee;line-height:1.5;">${img.caption}</div>` : ""}
+          <div style="column-count:2;column-gap:28px;">
+            ${page.images.map((img, idx) => `
+              <div style="break-inside:avoid;margin-bottom:24px;background:white;border-radius:16px;padding:12px 12px 16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);transform:rotate(${idx % 2 === 0 ? '-1' : '1'}deg);">
+                <img src="${img.public_url}" style="width:100%;border-radius:12px;object-fit:cover;aspect-ratio:${idx % 3 === 0 ? '3/4' : '4/3'};" />
+                ${img.caption ? `<div style="padding:12px 4px 0;text-align:center;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:15px;color:#444;line-height:1.6;letter-spacing:0.3px;">"${img.caption}"</div>` : ""}
               </div>
             `).join("")}
           </div>
@@ -172,7 +172,7 @@ const GeneratePage = () => {
     printWindow.document.write(`
       <!DOCTYPE html><html><head><title>${project?.name || "Memorie Yearbook"}</title>
       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
         body{margin:0;} @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
       </style></head><body>
         <div style="text-align:center;padding:100px 40px;page-break-after:always;background:${template.bg};min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
@@ -361,18 +361,33 @@ const GeneratePage = () => {
 
                         {/* Gallery type page */}
                         {pages[currentPage]?.type === "gallery" && (
-                          <div className="grid grid-cols-2 gap-4">
-                            {pages[currentPage]?.images.map((img) => (
-                              <div key={img.id} className="group rounded-xl overflow-hidden bg-muted shadow-card hover:shadow-elevated transition-shadow">
-                                <div className="aspect-[4/3] overflow-hidden">
-                                  <img src={img.public_url} alt={img.file_name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                </div>
-                                {img.caption && (
-                                  <div className="p-3 border-t border-border">
-                                    <p className="text-xs text-muted-foreground leading-relaxed">{img.caption}</p>
+                          <div className="columns-1 sm:columns-2 gap-5 space-y-5">
+                            {pages[currentPage]?.images.map((img, idx) => (
+                              <motion.div
+                                key={img.id}
+                                initial={{ opacity: 0, y: 30, rotate: idx % 2 === 0 ? -1.5 : 1.5 }}
+                                animate={{ opacity: 1, y: 0, rotate: idx % 2 === 0 ? -1 : 1 }}
+                                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                                className="break-inside-avoid group"
+                              >
+                                <div className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-500 hover:-translate-y-1 border border-border/50 p-3 pb-4">
+                                  <div className="rounded-xl overflow-hidden">
+                                    <img
+                                      src={img.public_url}
+                                      alt={img.file_name}
+                                      className="w-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                      style={{ aspectRatio: idx % 3 === 0 ? '3/4' : '4/3' }}
+                                    />
                                   </div>
-                                )}
-                              </div>
+                                  {img.caption && (
+                                    <div className="pt-3 px-1">
+                                      <p className="font-serif text-base sm:text-lg italic text-foreground/80 leading-relaxed tracking-wide text-center">
+                                        "{img.caption}"
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </motion.div>
                             ))}
                           </div>
                         )}

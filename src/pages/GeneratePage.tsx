@@ -569,12 +569,15 @@ const GeneratePage = () => {
     const pagesHtml = pages.map((page) => {
       const t = template;
       if (page.type === "cover") {
+        const ci = getActiveCoverImage();
         return `
-          <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${t.coverBg};padding:60px;text-align:center;">
-            <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:${t.subtitleColor};margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
-            <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:${t.titleColor};margin:0 0 12px;">${project?.name || "Our School Memories"}</h1>
-            <div style="width:60px;height:2px;background:${t.frameColor};margin:16px auto;border-radius:2px;"></div>
-            <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:#999;">Cherish Every Moment ${t.taglineEmoji}</p>
+          <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;background:url('${ci}') center/cover no-repeat, ${t.coverBg};padding:60px;text-align:center;position:relative;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45),transparent);"></div>
+            <div style="position:relative;z-index:1;padding-bottom:40px;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
+              <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:white;margin:0 0 12px;text-shadow:0 2px 12px rgba(0,0,0,0.3);">${project?.name || "Our School Memories"}</h1>
+              <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,0.7);">Cherish Every Moment ${t.taglineEmoji}</p>
+            </div>
           </div>`;
       }
       if (page.type === "message") {

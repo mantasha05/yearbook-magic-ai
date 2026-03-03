@@ -45,7 +45,7 @@ const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3 }: { icon: any; delay:
 );
 
 /* ─── Magazine Cover Page ─── */
-const CoverPage = ({ projectName, template, images }: { projectName: string; template: any; images: UploadItem[] }) => {
+const CoverPage = ({ projectName, batch, college, template, images }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[] }) => {
   const coverPhotos = images.slice(0, 5);
   return (
     <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: "linear-gradient(160deg, hsl(var(--pastel-pink)), hsl(var(--pastel-lavender) / 0.6), hsl(var(--pastel-cream)))" }}>
@@ -110,7 +110,9 @@ const CoverPage = ({ projectName, template, images }: { projectName: string; tem
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7 }}
       >
-        <p className="font-display text-xs tracking-[0.35em] uppercase text-pastel-rose/70 mb-3">Class of 2026</p>
+        <p className="font-display text-xs tracking-[0.35em] uppercase text-pastel-rose/70 mb-3">
+          {batch ? `Class of ${batch}` : college || "Class of 2026"}
+        </p>
         <h1 className="font-cursive text-4xl sm:text-5xl text-foreground drop-shadow-sm leading-tight mb-3">
           {projectName || "Our School Memories"}
         </h1>
@@ -466,7 +468,7 @@ const GeneratePage = () => {
       if (page.type === "cover") {
         return `
           <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#fce4ec,#e8eaf6aa,#fff8e1);padding:60px;text-align:center;">
-            <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:#ad6b8d;margin-bottom:16px;">Class of 2026</p>
+            <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:#ad6b8d;margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
             <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:#333;margin:0 0 12px;">${project?.name || "Our School Memories"}</h1>
             <div style="width:60px;height:2px;background:#d4a574;margin:16px auto;border-radius:2px;"></div>
             <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:#999;">Cherish Every Moment 💕</p>
@@ -680,7 +682,7 @@ const GeneratePage = () => {
                         transition={{ duration: 0.45 }}
                       >
                         {pages[currentPage]?.type === "cover" && (
-                          <CoverPage projectName={project?.name || ""} template={template} images={pages[currentPage].images} />
+                          <CoverPage projectName={project?.name || ""} batch={(project as any)?.batch} college={(project as any)?.college} template={template} images={pages[currentPage].images} />
                         )}
                         {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} />}
                         {pages[currentPage]?.type === "gallery" && <GalleryPage page={pages[currentPage]} />}

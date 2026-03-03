@@ -71,7 +71,7 @@ const Hero = () => {
                 className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 font-display h-12 px-8"
                 asChild
               >
-                <Link to="/#features">See How It Works</Link>
+                <a href="#how-it-works" onClick={(e) => { e.preventDefault(); document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" }); }}>See How It Works</a>
               </Button>
             </div>
 

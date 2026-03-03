@@ -242,7 +242,7 @@ const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
 
     {/* Section title */}
     <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6">
-      <h2 className="font-cursive text-3xl sm:text-4xl text-pastel-rose drop-shadow-sm">{page.title}</h2>
+      <h2 className="font-cursive text-3xl sm:text-4xl drop-shadow-sm" style={{ color: template?.subtitleColor || "#ad6b8d" }}>{page.title}</h2>
       <div className="flex items-center justify-center gap-2 mt-2">
         <div className="w-10 h-px bg-pastel-gold-frame/40" />
         <span className="text-pastel-gold-frame text-xs">✨</span>

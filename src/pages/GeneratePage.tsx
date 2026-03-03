@@ -263,7 +263,7 @@ const GalleryPage = ({ page }: { page: any }) => (
         className="flex justify-center mt-14 pt-2"
       >
         <p className="font-cursive text-2xl sm:text-3xl text-pastel-rose/80 text-center leading-relaxed drop-shadow-md">
-          Memories that make the heart smile 💕
+          {getSectionTagline(page.title)}
         </p>
       </motion.div>
     )}

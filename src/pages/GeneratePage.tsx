@@ -468,7 +468,7 @@ const GeneratePage = () => {
       if (page.type === "cover") {
         return `
           <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#fce4ec,#e8eaf6aa,#fff8e1);padding:60px;text-align:center;">
-            <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:#ad6b8d;margin-bottom:16px;">Class of 2026</p>
+            <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:#ad6b8d;margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
             <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:#333;margin:0 0 12px;">${project?.name || "Our School Memories"}</h1>
             <div style="width:60px;height:2px;background:#d4a574;margin:16px auto;border-radius:2px;"></div>
             <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:#999;">Cherish Every Moment 💕</p>

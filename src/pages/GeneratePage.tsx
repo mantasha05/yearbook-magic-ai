@@ -45,7 +45,7 @@ const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3 }: { icon: any; delay:
 );
 
 /* ─── Magazine Cover Page ─── */
-const CoverPage = ({ projectName, template, images }: { projectName: string; template: any; images: UploadItem[] }) => {
+const CoverPage = ({ projectName, batch, college, template, images }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[] }) => {
   const coverPhotos = images.slice(0, 5);
   return (
     <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: "linear-gradient(160deg, hsl(var(--pastel-pink)), hsl(var(--pastel-lavender) / 0.6), hsl(var(--pastel-cream)))" }}>

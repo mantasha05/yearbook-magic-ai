@@ -16,6 +16,9 @@ export interface Project {
   id: string;
   name: string;
   template: string;
+  college: string;
+  batch: string;
+  department: string;
   created_at: string;
   updated_at: string;
 }

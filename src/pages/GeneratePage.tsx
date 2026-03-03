@@ -629,11 +629,16 @@ const GeneratePage = () => {
                   <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
                     <Palette className="w-5 h-5 text-primary" /> Choose Template
                   </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {TEMPLATES.map((tmpl) => (
                       <button
                         key={tmpl.id}
-                        onClick={() => setSelectedTemplate(tmpl.id)}
+                        onClick={async () => {
+                          setSelectedTemplate(tmpl.id);
+                          if (project) {
+                            await supabase.from("projects").update({ template: tmpl.id, updated_at: new Date().toISOString() }).eq("id", project.id);
+                          }
+                        }}
                         className={`relative p-4 rounded-xl border-2 transition-all text-left ${
                           selectedTemplate === tmpl.id
                             ? "border-primary shadow-primary-glow bg-primary/5"

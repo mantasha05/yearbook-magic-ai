@@ -433,6 +433,11 @@ const GeneratePage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState("modern-magazine");
+  const [coverMode, setCoverMode] = useState<"design" | "custom">("design");
+  const [selectedCover, setSelectedCover] = useState("classic-navy");
+  const [customCoverUrl, setCustomCoverUrl] = useState<string | null>(null);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const enabledSections = sections.filter((s) => s.enabled);
 

@@ -63,7 +63,10 @@ export type Database = {
       }
       projects: {
         Row: {
+          batch: string
+          college: string
           created_at: string
+          department: string
           id: string
           name: string
           template: string
@@ -71,7 +74,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          batch?: string
+          college?: string
           created_at?: string
+          department?: string
           id?: string
           name?: string
           template?: string
@@ -79,7 +85,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          batch?: string
+          college?: string
           created_at?: string
+          department?: string
           id?: string
           name?: string
           template?: string

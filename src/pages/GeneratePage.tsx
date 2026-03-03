@@ -111,35 +111,52 @@ const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3, color }: { icon: any;
 );
 
 /* ─── Magazine Cover Page ─── */
-const CoverPage = ({ projectName, batch, college, template, images }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[] }) => {
+const CoverPage = ({ projectName, batch, college, template, images, coverImage }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[]; coverImage?: string }) => {
+  // If a cover image (pre-designed or custom) is selected, show it as a full-page cover
+  if (coverImage) {
+    return (
+      <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl">
+        <img src={coverImage} alt="Yearbook cover" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        <motion.div
+          className="relative z-10 text-center px-6 mt-auto pb-12"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          <p className="font-display text-xs tracking-[0.35em] uppercase mb-3 text-white/80">
+            {batch ? `Class of ${batch}` : college || "Class of 2026"}
+          </p>
+          <h1 className="font-cursive text-4xl sm:text-5xl drop-shadow-lg leading-tight mb-3 text-white">
+            {projectName || "Our School Memories"}
+          </h1>
+          <p className="font-serif italic text-sm text-white/70">Cherish Every Moment {template?.taglineEmoji || "💕"}</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Fallback: template-based cover with photo collage
   const coverPhotos = images.slice(0, 5);
   return (
     <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(160deg, hsl(var(--pastel-pink)), hsl(var(--pastel-lavender) / 0.6), hsl(var(--pastel-cream)))" }}>
-      {/* Bokeh lights */}
       {[...Array(8)].map((_, i) => (
         <motion.div
           key={`bokeh-${i}`}
           className="absolute rounded-full"
           style={{
-            width: 40 + i * 25,
-            height: 40 + i * 25,
-            top: `${10 + (i * 13) % 75}%`,
-            left: `${5 + (i * 17) % 85}%`,
+            width: 40 + i * 25, height: 40 + i * 25,
+            top: `${10 + (i * 13) % 75}%`, left: `${5 + (i * 17) % 85}%`,
             background: `radial-gradient(circle, ${template?.frameColor || "hsl(var(--pastel-gold-frame))"}22, transparent)`,
           }}
           animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
         />
       ))}
+      <FloatingDeco icon={Heart} delay={0} x="8%" y="15%" size={4} color={template?.frameColor} />
+      <FloatingDeco icon={Sparkles} delay={0.5} x="85%" y="20%" size={3} color={template?.frameColor} />
+      <FloatingDeco icon={Star} delay={1} x="12%" y="75%" size={3} color={template?.frameColor} />
 
-      {/* Floating hearts & sparkles */}
-      <FloatingDeco icon={Heart} delay={0} x="8%" y="15%" size={4} />
-      <FloatingDeco icon={Sparkles} delay={0.5} x="85%" y="20%" size={3} />
-      <FloatingDeco icon={Star} delay={1} x="12%" y="75%" size={3} />
-      <FloatingDeco icon={Heart} delay={1.5} x="80%" y="70%" size={4} />
-      <FloatingDeco icon={Sparkles} delay={0.8} x="50%" y="10%" size={3} />
-
-      {/* Cover photo collage */}
       {coverPhotos.length > 0 && (
         <div className="relative w-72 h-48 mb-8 mt-4">
           {coverPhotos.map((img, i) => {
@@ -152,15 +169,10 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
             ];
             const p = positions[i];
             return (
-              <motion.div
-                key={img.id}
-                className="absolute"
-                style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: 5 - i }}
-                initial={{ opacity: 0, scale: 0.7, rotate: p.rot }}
-                animate={{ opacity: 1, scale: 1, rotate: p.rot }}
-                transition={{ delay: 0.2 + i * 0.15, duration: 0.6, ease: "easeOut" }}
-              >
-                <div className="w-full h-full rounded-2xl p-[2px] bg-gradient-to-br from-pastel-gold-frame/70 via-white to-pastel-pink/50 shadow-pastel-lg">
+              <motion.div key={img.id} className="absolute" style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: 5 - i }}
+                initial={{ opacity: 0, scale: 0.7, rotate: p.rot }} animate={{ opacity: 1, scale: 1, rotate: p.rot }}
+                transition={{ delay: 0.2 + i * 0.15, duration: 0.6, ease: "easeOut" }}>
+                <div className="w-full h-full rounded-2xl p-[2px] shadow-lg" style={{ background: `linear-gradient(135deg, ${template?.frameColor || "#d4a574"}bb, white, ${template?.pdfLight || "#e8d5b7"}80)` }}>
                   <img src={img.public_url} alt="" className="w-full h-full object-cover rounded-[14px]" />
                 </div>
               </motion.div>
@@ -169,13 +181,7 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
         </div>
       )}
 
-      {/* Title */}
-      <motion.div
-        className="relative z-10 text-center px-6"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.7 }}
-      >
+      <motion.div className="relative z-10 text-center px-6" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }}>
         <p className="font-display text-xs tracking-[0.35em] uppercase mb-3" style={{ color: template?.subtitleColor || "#ad6b8d" }}>
           {batch ? `Class of ${batch}` : college || "Class of 2026"}
         </p>

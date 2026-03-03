@@ -1010,7 +1010,7 @@ const GeneratePage = () => {
                         {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "gallery" && <GalleryPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "qr" && <QRPage page={pages[currentPage]} flipbookUrl={flipbookUrl} template={template} />}
-                        {pages[currentPage]?.type === "back-cover" && <BackCover projectName={project?.name || ""} template={template} />}
+                        {pages[currentPage]?.type === "back-cover" && <BackCover projectName={project?.name || ""} template={template} backCoverImage={getActiveBackCoverImage()} />}
                       </motion.div>
                     </AnimatePresence>
                   </div>

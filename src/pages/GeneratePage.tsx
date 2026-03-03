@@ -497,6 +497,32 @@ const GeneratePage = () => {
     }
   };
 
+  const getActiveBackCoverImage = () => {
+    if (backCoverMode === "custom" && customBackCoverUrl) return customBackCoverUrl;
+    return COVER_DESIGNS.find((c) => c.id === selectedBackCover)?.src || COVER_DESIGNS[0].src;
+  };
+
+  const handleBackCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploadingBackCover(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/back-cover-${Date.now()}.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("yearbook-uploads").upload(path, file);
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = supabase.storage.from("yearbook-uploads").getPublicUrl(path);
+      setCustomBackCoverUrl(urlData.publicUrl);
+      setBackCoverMode("custom");
+      toast({ title: "Back cover uploaded! 🎨", description: "Your custom back cover is ready." });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err?.message || "Could not upload back cover.", variant: "destructive" });
+    } finally {
+      setUploadingBackCover(false);
+      if (backCoverInputRef.current) backCoverInputRef.current.value = "";
+    }
+  };
+
   const getActiveCoverImage = () => {
     if (coverMode === "custom" && customCoverUrl) return customCoverUrl;
     return COVER_DESIGNS.find((c) => c.id === selectedCover)?.src || COVER_DESIGNS[0].src;

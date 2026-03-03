@@ -426,18 +426,24 @@ const GeneratePage = () => {
     // Front cover
     magazinePages.push({ title: "Front Cover", type: "cover", images: allImages });
 
-    // Content pages
+    // Content pages (skip QR — we add it at the end)
+    let qrContent: Record<string, any> = {};
     enabledSections.forEach((section) => {
       const sectionUploads = uploads[section.section_key] || [];
       const sectionContent = (section.content as Record<string, any>) || {};
+      if (section.section_key === "qr") {
+        qrContent = sectionContent;
+        return; // handled below
+      }
       if (section.section_key === "principal") {
         magazinePages.push({ title: section.title, type: "message", images: sectionUploads, content: sectionContent });
-      } else if (section.section_key === "qr") {
-        magazinePages.push({ title: section.title, type: "qr", images: [], content: sectionContent });
       } else if (sectionUploads.length > 0) {
         magazinePages.push({ title: section.title, type: "gallery", images: sectionUploads, content: sectionContent });
       }
     });
+
+    // QR code always before back cover
+    magazinePages.push({ title: "QR Code - Scan & Access", type: "qr", images: [], content: qrContent });
 
     // Back cover
     magazinePages.push({ title: "Back Cover", type: "back-cover", images: [] });

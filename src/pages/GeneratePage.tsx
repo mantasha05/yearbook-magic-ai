@@ -25,6 +25,20 @@ interface UploadItem {
 
 type GenerationStatus = "idle" | "collecting" | "generating" | "done" | "error";
 
+/* ─── Section-specific taglines ─── */
+const SECTION_TAGLINES: Record<string, string> = {
+  "Principal's Message": "Words of wisdom to carry forward 🎓",
+  "Academic Stars & Toppers": "Brilliance that lights the way ⭐",
+  "Events Gallery": "Moments frozen in time 📸",
+  "Fun Memes & Candid Moments": "Laughter is the best flashback 😂",
+  "Farewell & Memories": "Goodbyes that echo forever 💫",
+  "QR Code - College Anthem": "Scan, listen, relive 🎵",
+};
+
+const getSectionTagline = (title: string): string => {
+  return SECTION_TAGLINES[title] || "Memories that make the heart smile 💕";
+};
+
 const TEMPLATES = [
   { id: "modern-magazine", name: "Modern Magazine", accent: "hsl(235, 65%, 45%)", bg: "linear-gradient(135deg, #3730a3, #1e1b4b)" },
   { id: "sparkly-memories", name: "Sparkly Memories", accent: "hsl(38, 92%, 50%)", bg: "linear-gradient(135deg, #d97706, #f59e0b)" },

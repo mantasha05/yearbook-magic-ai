@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Download, BookOpen, Loader2, CheckCircle2, AlertCircle,
-  ChevronLeft, ChevronRight, Sparkles, Star, Palette, Heart, Mail, QrCode,
+  ChevronLeft, ChevronRight, Sparkles, Star, Palette, Heart, Mail, QrCode, ImagePlus, Upload, X,
 } from "lucide-react";
+import coverClassicNavy from "@/assets/cover-classic-navy.png";
+import coverGoldGeometric from "@/assets/cover-gold-geometric.png";
+import coverPastelMemories from "@/assets/cover-pastel-memories.png";
+import coverRetroVintage from "@/assets/cover-retro-vintage.png";
+import coverNeonCyber from "@/assets/cover-neon-cyber.png";
 import { Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
@@ -38,6 +43,15 @@ const SECTION_TAGLINES: Record<string, string> = {
 const getSectionTagline = (title: string): string => {
   return SECTION_TAGLINES[title] || "Memories that make the heart smile 💕";
 };
+
+/* ─── Pre-designed cover images ─── */
+const COVER_DESIGNS = [
+  { id: "classic-navy", name: "Classic Navy & Gold", src: coverClassicNavy },
+  { id: "gold-geometric", name: "Gold Geometric", src: coverGoldGeometric },
+  { id: "pastel-memories", name: "Pastel Memories", src: coverPastelMemories },
+  { id: "retro-vintage", name: "Retro Vintage", src: coverRetroVintage },
+  { id: "neon-cyber", name: "Neon Cyber", src: coverNeonCyber },
+];
 
 const TEMPLATES = [
   {
@@ -97,35 +111,52 @@ const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3, color }: { icon: any;
 );
 
 /* ─── Magazine Cover Page ─── */
-const CoverPage = ({ projectName, batch, college, template, images }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[] }) => {
+const CoverPage = ({ projectName, batch, college, template, images, coverImage }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[]; coverImage?: string }) => {
+  // If a cover image (pre-designed or custom) is selected, show it as a full-page cover
+  if (coverImage) {
+    return (
+      <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl">
+        <img src={coverImage} alt="Yearbook cover" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        <motion.div
+          className="relative z-10 text-center px-6 mt-auto pb-12"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          <p className="font-display text-xs tracking-[0.35em] uppercase mb-3 text-white/80">
+            {batch ? `Class of ${batch}` : college || "Class of 2026"}
+          </p>
+          <h1 className="font-cursive text-4xl sm:text-5xl drop-shadow-lg leading-tight mb-3 text-white">
+            {projectName || "Our School Memories"}
+          </h1>
+          <p className="font-serif italic text-sm text-white/70">Cherish Every Moment {template?.taglineEmoji || "💕"}</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Fallback: template-based cover with photo collage
   const coverPhotos = images.slice(0, 5);
   return (
     <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(160deg, hsl(var(--pastel-pink)), hsl(var(--pastel-lavender) / 0.6), hsl(var(--pastel-cream)))" }}>
-      {/* Bokeh lights */}
       {[...Array(8)].map((_, i) => (
         <motion.div
           key={`bokeh-${i}`}
           className="absolute rounded-full"
           style={{
-            width: 40 + i * 25,
-            height: 40 + i * 25,
-            top: `${10 + (i * 13) % 75}%`,
-            left: `${5 + (i * 17) % 85}%`,
+            width: 40 + i * 25, height: 40 + i * 25,
+            top: `${10 + (i * 13) % 75}%`, left: `${5 + (i * 17) % 85}%`,
             background: `radial-gradient(circle, ${template?.frameColor || "hsl(var(--pastel-gold-frame))"}22, transparent)`,
           }}
           animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
         />
       ))}
+      <FloatingDeco icon={Heart} delay={0} x="8%" y="15%" size={4} color={template?.frameColor} />
+      <FloatingDeco icon={Sparkles} delay={0.5} x="85%" y="20%" size={3} color={template?.frameColor} />
+      <FloatingDeco icon={Star} delay={1} x="12%" y="75%" size={3} color={template?.frameColor} />
 
-      {/* Floating hearts & sparkles */}
-      <FloatingDeco icon={Heart} delay={0} x="8%" y="15%" size={4} />
-      <FloatingDeco icon={Sparkles} delay={0.5} x="85%" y="20%" size={3} />
-      <FloatingDeco icon={Star} delay={1} x="12%" y="75%" size={3} />
-      <FloatingDeco icon={Heart} delay={1.5} x="80%" y="70%" size={4} />
-      <FloatingDeco icon={Sparkles} delay={0.8} x="50%" y="10%" size={3} />
-
-      {/* Cover photo collage */}
       {coverPhotos.length > 0 && (
         <div className="relative w-72 h-48 mb-8 mt-4">
           {coverPhotos.map((img, i) => {
@@ -138,15 +169,10 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
             ];
             const p = positions[i];
             return (
-              <motion.div
-                key={img.id}
-                className="absolute"
-                style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: 5 - i }}
-                initial={{ opacity: 0, scale: 0.7, rotate: p.rot }}
-                animate={{ opacity: 1, scale: 1, rotate: p.rot }}
-                transition={{ delay: 0.2 + i * 0.15, duration: 0.6, ease: "easeOut" }}
-              >
-                <div className="w-full h-full rounded-2xl p-[2px] bg-gradient-to-br from-pastel-gold-frame/70 via-white to-pastel-pink/50 shadow-pastel-lg">
+              <motion.div key={img.id} className="absolute" style={{ left: p.x, top: p.y, width: p.w, height: p.h, zIndex: 5 - i }}
+                initial={{ opacity: 0, scale: 0.7, rotate: p.rot }} animate={{ opacity: 1, scale: 1, rotate: p.rot }}
+                transition={{ delay: 0.2 + i * 0.15, duration: 0.6, ease: "easeOut" }}>
+                <div className="w-full h-full rounded-2xl p-[2px] shadow-lg" style={{ background: `linear-gradient(135deg, ${template?.frameColor || "#d4a574"}bb, white, ${template?.pdfLight || "#e8d5b7"}80)` }}>
                   <img src={img.public_url} alt="" className="w-full h-full object-cover rounded-[14px]" />
                 </div>
               </motion.div>
@@ -155,13 +181,7 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
         </div>
       )}
 
-      {/* Title */}
-      <motion.div
-        className="relative z-10 text-center px-6"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.7 }}
-      >
+      <motion.div className="relative z-10 text-center px-6" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }}>
         <p className="font-display text-xs tracking-[0.35em] uppercase mb-3" style={{ color: template?.subtitleColor || "#ad6b8d" }}>
           {batch ? `Class of ${batch}` : college || "Class of 2026"}
         </p>
@@ -419,6 +439,11 @@ const GeneratePage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState("modern-magazine");
+  const [coverMode, setCoverMode] = useState<"design" | "custom">("design");
+  const [selectedCover, setSelectedCover] = useState("classic-navy");
+  const [customCoverUrl, setCustomCoverUrl] = useState<string | null>(null);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   const enabledSections = sections.filter((s) => s.enabled);
 
@@ -445,6 +470,32 @@ const GeneratePage = () => {
     };
     load();
   }, [user]);
+
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploadingCover(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/cover-${Date.now()}.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("yearbook-uploads").upload(path, file);
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = supabase.storage.from("yearbook-uploads").getPublicUrl(path);
+      setCustomCoverUrl(urlData.publicUrl);
+      setCoverMode("custom");
+      toast({ title: "Cover uploaded! 🎨", description: "Your custom cover is ready." });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err?.message || "Could not upload cover.", variant: "destructive" });
+    } finally {
+      setUploadingCover(false);
+      if (coverInputRef.current) coverInputRef.current.value = "";
+    }
+  };
+
+  const getActiveCoverImage = () => {
+    if (coverMode === "custom" && customCoverUrl) return customCoverUrl;
+    return COVER_DESIGNS.find((c) => c.id === selectedCover)?.src || COVER_DESIGNS[0].src;
+  };
 
   const handleGenerate = async () => {
     const hasContent = enabledSections.some(
@@ -518,12 +569,15 @@ const GeneratePage = () => {
     const pagesHtml = pages.map((page) => {
       const t = template;
       if (page.type === "cover") {
+        const ci = getActiveCoverImage();
         return `
-          <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${t.coverBg};padding:60px;text-align:center;">
-            <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:${t.subtitleColor};margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
-            <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:${t.titleColor};margin:0 0 12px;">${project?.name || "Our School Memories"}</h1>
-            <div style="width:60px;height:2px;background:${t.frameColor};margin:16px auto;border-radius:2px;"></div>
-            <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:#999;">Cherish Every Moment ${t.taglineEmoji}</p>
+          <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;background:url('${ci}') center/cover no-repeat, ${t.coverBg};padding:60px;text-align:center;position:relative;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45),transparent);"></div>
+            <div style="position:relative;z-index:1;padding-bottom:40px;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
+              <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:white;margin:0 0 12px;text-shadow:0 2px 12px rgba(0,0,0,0.3);">${project?.name || "Our School Memories"}</h1>
+              <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,0.7);">Cherish Every Moment ${t.taglineEmoji}</p>
+            </div>
           </div>`;
       }
       if (page.type === "message") {
@@ -652,6 +706,90 @@ const GeneratePage = () => {
                   </div>
                 </div>
 
+                {/* Cover Image Selection */}
+                <div>
+                  <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <ImagePlus className="w-5 h-5 text-primary" /> Front Cover Image
+                  </h3>
+
+                  {/* Toggle: Pre-designed vs Custom */}
+                  <div className="flex gap-2 mb-4">
+                    <button
+                      onClick={() => setCoverMode("design")}
+                      className={`px-4 py-2 rounded-lg text-sm font-display font-medium transition-all ${
+                        coverMode === "design" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      Pre-designed Covers
+                    </button>
+                    <button
+                      onClick={() => setCoverMode("custom")}
+                      className={`px-4 py-2 rounded-lg text-sm font-display font-medium transition-all ${
+                        coverMode === "custom" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      Upload Your Own
+                    </button>
+                  </div>
+
+                  {coverMode === "design" ? (
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                      {COVER_DESIGNS.map((cover) => (
+                        <button
+                          key={cover.id}
+                          onClick={() => setSelectedCover(cover.id)}
+                          className={`relative rounded-xl border-2 overflow-hidden transition-all aspect-[3/4] ${
+                            selectedCover === cover.id
+                              ? "border-primary shadow-primary-glow scale-[1.03]"
+                              : "border-border hover:border-primary/30"
+                          }`}
+                        >
+                          <img src={cover.src} alt={cover.name} className="w-full h-full object-cover" />
+                          {selectedCover === cover.id && (
+                            <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                              <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
+                            </div>
+                          )}
+                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                            <p className="text-[10px] text-white font-display font-medium leading-tight">{cover.name}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {customCoverUrl ? (
+                        <div className="relative inline-block">
+                          <img src={customCoverUrl} alt="Custom cover" className="w-48 aspect-[3/4] object-cover rounded-xl border-2 border-primary shadow-primary-glow" />
+                          <button
+                            onClick={() => { setCustomCoverUrl(null); setCoverMode("design"); }}
+                            className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => coverInputRef.current?.click()}
+                          disabled={uploadingCover}
+                          className="flex flex-col items-center justify-center w-48 aspect-[3/4] rounded-xl border-2 border-dashed border-border hover:border-primary/40 bg-muted/30 transition-all cursor-pointer"
+                        >
+                          {uploadingCover ? (
+                            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                          ) : (
+                            <>
+                              <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                              <p className="text-sm font-display text-muted-foreground">Upload Cover</p>
+                              <p className="text-xs text-muted-foreground/60 mt-1">JPG, PNG up to 10MB</p>
+                            </>
+                          )}
+                        </button>
+                      )}
+                      <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <h3 className="font-display font-semibold text-foreground mb-4">Section Summary</h3>
                   <div className="grid gap-3">
@@ -741,7 +879,7 @@ const GeneratePage = () => {
                         transition={{ duration: 0.45 }}
                       >
                         {pages[currentPage]?.type === "cover" && (
-                          <CoverPage projectName={project?.name || ""} batch={(project as any)?.batch} college={(project as any)?.college} template={template} images={pages[currentPage].images} />
+                          <CoverPage projectName={project?.name || ""} batch={(project as any)?.batch} college={(project as any)?.college} template={template} images={pages[currentPage].images} coverImage={getActiveCoverImage()} />
                         )}
                         {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "gallery" && <GalleryPage page={pages[currentPage]} template={template} />}

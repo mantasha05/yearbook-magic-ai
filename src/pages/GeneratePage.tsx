@@ -444,6 +444,11 @@ const GeneratePage = () => {
   const [customCoverUrl, setCustomCoverUrl] = useState<string | null>(null);
   const [uploadingCover, setUploadingCover] = useState(false);
   const coverInputRef = useRef<HTMLInputElement>(null);
+  const [backCoverMode, setBackCoverMode] = useState<"design" | "custom">("design");
+  const [selectedBackCover, setSelectedBackCover] = useState("classic-navy");
+  const [customBackCoverUrl, setCustomBackCoverUrl] = useState<string | null>(null);
+  const [uploadingBackCover, setUploadingBackCover] = useState(false);
+  const backCoverInputRef = useRef<HTMLInputElement>(null);
 
   const enabledSections = sections.filter((s) => s.enabled);
 

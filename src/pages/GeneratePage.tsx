@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Download, BookOpen, Loader2, CheckCircle2, AlertCircle,
-  ChevronLeft, ChevronRight, Sparkles, Star, Palette, Heart, Mail, QrCode,
+  ChevronLeft, ChevronRight, Sparkles, Star, Palette, Heart, Mail, QrCode, ImagePlus, Upload, X,
 } from "lucide-react";
+import coverClassicNavy from "@/assets/cover-classic-navy.png";
+import coverGoldGeometric from "@/assets/cover-gold-geometric.png";
+import coverPastelMemories from "@/assets/cover-pastel-memories.png";
+import coverRetroVintage from "@/assets/cover-retro-vintage.png";
+import coverNeonCyber from "@/assets/cover-neon-cyber.png";
 import { Link } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";

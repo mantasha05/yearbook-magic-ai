@@ -571,9 +571,9 @@ const GeneratePage = () => {
       if (page.type === "cover") {
         const ci = getActiveCoverImage();
         return `
-          <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;background:url('${ci}') center/cover no-repeat, ${t.coverBg};padding:60px;text-align:center;position:relative;">
+          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;background:url('${ci}') center/cover no-repeat, ${t.coverBg};text-align:center;">
             <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45),transparent);"></div>
-            <div style="position:relative;z-index:1;padding-bottom:40px;">
+            <div style="position:relative;z-index:1;padding-bottom:60px;">
               <p style="font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:16px;">${(project as any)?.batch ? `Class of ${(project as any).batch}` : (project as any)?.college || "Class of 2026"}</p>
               <h1 style="font-family:'Dancing Script',cursive;font-size:52px;color:white;margin:0 0 12px;text-shadow:0 2px 12px rgba(0,0,0,0.3);">${project?.name || "Our School Memories"}</h1>
               <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,0.7);">Cherish Every Moment ${t.taglineEmoji}</p>
@@ -582,12 +582,12 @@ const GeneratePage = () => {
       }
       if (page.type === "message") {
         return `
-          <div style="page-break-after:always;padding:60px;font-family:'Space Grotesk',sans-serif;background:linear-gradient(145deg,${t.pdfLight}aa,${t.pdfLight}22);">
-            <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;">
-              ${page.images[0] ? `<div style="flex-shrink:0;"><img src="${page.images[0].public_url}" style="width:180px;height:220px;border-radius:50%;object-fit:cover;border:4px solid ${t.frameColor};box-shadow:0 8px 32px ${t.pdfAccent}25;" /></div>` : ""}
-              <div style="flex:1;min-width:260px;">
-                <h2 style="font-family:'Dancing Script',cursive;font-size:34px;color:${t.subtitleColor};margin:0 0 20px;">💖 ${page.title}</h2>
-                <div style="font-family:'Playfair Display',serif;font-size:18px;line-height:1.9;color:#444;font-style:italic;padding:24px;background:rgba(255,255,255,0.7);border-radius:16px;border-left:4px solid ${t.frameColor};">
+          <div class="page" style="padding:50px;font-family:'Space Grotesk',sans-serif;background:linear-gradient(145deg,${t.pdfLight}aa,${t.pdfLight}22);display:flex;align-items:center;">
+            <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;width:100%;">
+              ${page.images[0] ? `<div style="flex-shrink:0;"><img src="${page.images[0].public_url}" style="width:160px;height:200px;border-radius:50%;object-fit:cover;border:4px solid ${t.frameColor};box-shadow:0 8px 32px ${t.pdfAccent}25;" /></div>` : ""}
+              <div style="flex:1;min-width:240px;">
+                <h2 style="font-family:'Dancing Script',cursive;font-size:32px;color:${t.subtitleColor};margin:0 0 20px;">💖 ${page.title}</h2>
+                <div style="font-family:'Playfair Display',serif;font-size:16px;line-height:1.9;color:#444;font-style:italic;padding:24px;background:rgba(255,255,255,0.7);border-radius:16px;border-left:4px solid ${t.frameColor};">
                   ${page.content?.richText || "Dear Students, Dream big and shine bright!"}
                 </div>
               </div>
@@ -596,7 +596,7 @@ const GeneratePage = () => {
       }
       if (page.type === "qr") {
         return `
-          <div style="page-break-after:always;padding:60px;text-align:center;background:linear-gradient(160deg,${t.pdfLight}aa,${t.pdfLight}33);">
+          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,${t.pdfLight}aa,${t.pdfLight}33);">
             <h2 style="font-family:'Dancing Script',cursive;font-size:34px;color:${t.subtitleColor};margin-bottom:12px;">${page.title}</h2>
             <p style="font-family:'Playfair Display',serif;font-style:italic;color:#888;margin-bottom:32px;">Scan to Access Full Magazine Online 📱</p>
             <div style="display:inline-block;padding:24px;background:white;border-radius:24px;box-shadow:0 12px 40px ${t.pdfAccent}20;border:2px solid ${t.frameColor}33;">
@@ -607,7 +607,7 @@ const GeneratePage = () => {
       }
       if (page.type === "back-cover") {
         return `
-          <div style="page-break-after:always;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${t.coverBg};padding:60px;text-align:center;">
+          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:${t.coverBg};text-align:center;">
             <div style="border:2px solid ${t.frameColor}44;border-radius:24px;padding:48px 40px;background:rgba(255,255,255,0.4);backdrop-filter:blur(8px);max-width:380px;">
               <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:${t.frameColor}aa;margin-bottom:24px;">Thank You</p>
               <h2 style="font-family:'Dancing Script',cursive;font-size:40px;color:${t.titleColor};margin:0 0 16px;">Cherish the Moments 💖</h2>
@@ -620,24 +620,24 @@ const GeneratePage = () => {
       // Gallery
       const tagline = getSectionTagline(page.title);
       return `
-        <div style="page-break-after:always;padding:40px 50px;background:linear-gradient(160deg,${t.pdfLight}22,${t.pdfLight}11,white);">
-          <div style="text-align:center;margin-bottom:28px;">
-            <h2 style="font-family:'Dancing Script',cursive;font-size:38px;color:${t.subtitleColor};">${page.title}</h2>
+        <div class="page" style="padding:40px 40px;background:linear-gradient(160deg,${t.pdfLight}22,${t.pdfLight}11,white);">
+          <div style="text-align:center;margin-bottom:24px;">
+            <h2 style="font-family:'Dancing Script',cursive;font-size:36px;color:${t.subtitleColor};">${page.title}</h2>
             <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;">
               <div style="width:40px;height:1px;background:${t.frameColor};opacity:0.4;"></div>
               <span style="color:${t.frameColor};font-size:12px;">✨</span>
               <div style="width:40px;height:1px;background:${t.frameColor};opacity:0.4;"></div>
             </div>
           </div>
-          <div style="column-count:2;column-gap:24px;">
+          <div style="column-count:2;column-gap:20px;">
             ${page.images.map((img: UploadItem, idx: number) => `
-              <div style="break-inside:avoid;margin-bottom:24px;background:white;border-radius:18px;padding:5px;box-shadow:0 6px 28px ${t.pdfAccent}18;border:1.5px solid ${t.frameColor}15;transform:rotate(${idx % 3 === 0 ? '-1.5' : idx % 3 === 1 ? '1' : '0'}deg);">
-                <img src="${img.public_url}" style="width:100%;border-radius:14px;object-fit:cover;aspect-ratio:${idx % 3 === 0 ? '3/4' : '4/3'};" />
-                ${img.caption ? `<div style="padding:12px 8px 8px;text-align:center;font-family:'Dancing Script',cursive;font-size:19px;color:${t.subtitleColor};line-height:1.5;">${img.caption} 💕</div>` : ""}
+              <div style="break-inside:avoid;margin-bottom:20px;background:white;border-radius:16px;padding:4px;box-shadow:0 4px 20px ${t.pdfAccent}15;border:1px solid ${t.frameColor}15;transform:rotate(${idx % 3 === 0 ? '-1' : idx % 3 === 1 ? '0.8' : '0'}deg);">
+                <img src="${img.public_url}" style="width:100%;border-radius:12px;object-fit:cover;aspect-ratio:${idx % 3 === 0 ? '3/4' : '4/3'};" />
+                ${img.caption ? `<div style="padding:10px 6px 6px;text-align:center;font-family:'Dancing Script',cursive;font-size:17px;color:${t.subtitleColor};line-height:1.4;">${img.caption} 💕</div>` : ""}
               </div>
             `).join("")}
           </div>
-          <div style="text-align:center;margin-top:24px;font-family:'Dancing Script',cursive;font-size:22px;color:${t.subtitleColor}88;">${tagline}</div>
+          <div style="text-align:center;margin-top:20px;font-family:'Dancing Script',cursive;font-size:20px;color:${t.subtitleColor}88;">${tagline}</div>
         </div>`;
     }).join("");
 

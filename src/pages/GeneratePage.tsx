@@ -722,9 +722,9 @@ const GeneratePage = () => {
                 {/* Flipbook viewer */}
                 <div className="relative bg-card border border-border rounded-2xl shadow-elevated overflow-hidden">
                   {/* Header bar */}
-                  <div className="p-4 flex items-center justify-between bg-gradient-to-r from-pastel-pink/30 via-pastel-lavender/20 to-pastel-cream/30 border-b border-border">
+                  <div className="p-4 flex items-center justify-between border-b border-border" style={{ background: `linear-gradient(90deg, ${template.pdfLight}44, ${template.pdfLight}22, ${template.pdfLight}44)` }}>
                     <div className="flex items-center gap-2">
-                      <Heart className="w-4 h-4 text-pastel-rose/60 fill-pastel-rose/30" />
+                      <Heart className="w-4 h-4" style={{ color: `${template.subtitleColor}99`, fill: `${template.subtitleColor}50` }} />
                       <h3 className="font-cursive text-lg text-foreground">{pages[currentPage]?.title}</h3>
                     </div>
                     <span className="text-xs text-muted-foreground font-display">Page {currentPage + 1} of {pages.length}</span>
@@ -758,7 +758,7 @@ const GeneratePage = () => {
                     </Button>
                     <div className="flex gap-1.5">
                       {pages.map((_, i) => (
-                        <button key={i} onClick={() => setCurrentPage(i)} className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentPage ? "bg-pastel-rose" : "bg-border"}`} />
+                        <button key={i} onClick={() => setCurrentPage(i)} className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentPage ? "" : "bg-border"}`} style={i === currentPage ? { background: template.subtitleColor } : {}} />
                       ))}
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => setCurrentPage((p) => Math.min(pages.length - 1, p + 1))} disabled={currentPage === pages.length - 1} className="font-display">

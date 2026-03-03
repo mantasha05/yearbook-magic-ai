@@ -465,6 +465,32 @@ const GeneratePage = () => {
     load();
   }, [user]);
 
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploadingCover(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/cover-${Date.now()}.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("yearbook-uploads").upload(path, file);
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = supabase.storage.from("yearbook-uploads").getPublicUrl(path);
+      setCustomCoverUrl(urlData.publicUrl);
+      setCoverMode("custom");
+      toast({ title: "Cover uploaded! 🎨", description: "Your custom cover is ready." });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err?.message || "Could not upload cover.", variant: "destructive" });
+    } finally {
+      setUploadingCover(false);
+      if (coverInputRef.current) coverInputRef.current.value = "";
+    }
+  };
+
+  const getActiveCoverImage = () => {
+    if (coverMode === "custom" && customCoverUrl) return customCoverUrl;
+    return COVER_DESIGNS.find((c) => c.id === selectedCover)?.src || COVER_DESIGNS[0].src;
+  };
+
   const handleGenerate = async () => {
     const hasContent = enabledSections.some(
       (s) => (uploads[s.section_key] || []).length > 0 || (s.content as any)?.richText

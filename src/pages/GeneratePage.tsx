@@ -381,53 +381,57 @@ const QRPage = ({ page, flipbookUrl, template }: { page: any; flipbookUrl: strin
 );
 
 /* ─── Back Cover ─── */
-const BackCover = ({ projectName, template }: { projectName: string; template: any }) => (
-  <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(180deg, #e8d5b7, #d4a05666, #f5e6d366)" }}>
-    {/* Soft bokeh */}
-    {[...Array(5)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute rounded-full"
-        style={{
-          width: 60 + i * 30,
-          height: 60 + i * 30,
-          top: `${20 + i * 15}%`,
-          left: `${10 + i * 18}%`,
-          background: `radial-gradient(circle, ${template?.frameColor || "#a0522d"}1e, transparent)`,
-        }}
-        animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
-        transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
-      />
-    ))}
-
-    <FloatingDeco icon={Heart} delay={0} x="10%" y="25%" size={4} color={template?.frameColor} />
-    <FloatingDeco icon={Sparkles} delay={1} x="85%" y="30%" color={template?.frameColor} />
-
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.7 }}
-      className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/40 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
-      style={{ border: `2px solid ${template?.frameColor || "#a0522d"}44` }}
-    >
-      <p className="font-display text-xs tracking-[0.3em] uppercase mb-6" style={{ color: `${template?.frameColor || "#a0522d"}99` }}>Thank You</p>
-      <h2 className="font-cursive text-4xl leading-tight mb-4" style={{ color: template?.titleColor || "#4a3728" }}>
-        Cherish the Moments 💖
-      </h2>
-      <div className="flex items-center justify-center gap-3 my-5">
-        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
-        <Star className="w-4 h-4" style={{ color: `${template?.frameColor || "#a0522d"}80`, fill: `${template?.frameColor || "#a0522d"}40` }} />
-        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+const BackCover = ({ projectName, template, backCoverImage }: { projectName: string; template: any; backCoverImage?: string }) => {
+  if (backCoverImage) {
+    return (
+      <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl">
+        <img src={backCoverImage} alt="Back cover" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        <motion.div
+          className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/20 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
+          style={{ border: `2px solid rgba(255,255,255,0.3)` }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <p className="font-display text-xs tracking-[0.3em] uppercase mb-6 text-white/80">Thank You</p>
+          <h2 className="font-cursive text-4xl leading-tight mb-4 text-white drop-shadow-lg">Cherish the Moments 💖</h2>
+          <div className="flex items-center justify-center gap-3 my-5">
+            <div className="w-10 h-px bg-white/50" />
+            <Star className="w-4 h-4 text-white/70" />
+            <div className="w-10 h-px bg-white/50" />
+          </div>
+          <p className="font-serif italic text-sm text-white/70 leading-relaxed">Memories that last forever, friendships that never fade.</p>
+          <p className="font-display text-xs text-white/40 mt-8 tracking-wider">Created with ✨ Memorie</p>
+        </motion.div>
       </div>
-      <p className="font-serif italic text-sm text-muted-foreground leading-relaxed">
-        Memories that last forever, friendships that never fade.
-      </p>
-      <p className="font-display text-xs text-muted-foreground/60 mt-8 tracking-wider">
-        Created with ✨ Memorie
-      </p>
-    </motion.div>
-  </div>
-);
+    );
+  }
+
+  return (
+    <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(180deg, #e8d5b7, #d4a05666, #f5e6d366)" }}>
+      {[...Array(5)].map((_, i) => (
+        <motion.div key={i} className="absolute rounded-full" style={{ width: 60 + i * 30, height: 60 + i * 30, top: `${20 + i * 15}%`, left: `${10 + i * 18}%`, background: `radial-gradient(circle, ${template?.frameColor || "#a0522d"}1e, transparent)` }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }} transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }} />
+      ))}
+      <FloatingDeco icon={Heart} delay={0} x="10%" y="25%" size={4} color={template?.frameColor} />
+      <FloatingDeco icon={Sparkles} delay={1} x="85%" y="30%" color={template?.frameColor} />
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }}
+        className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/40 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
+        style={{ border: `2px solid ${template?.frameColor || "#a0522d"}44` }}>
+        <p className="font-display text-xs tracking-[0.3em] uppercase mb-6" style={{ color: `${template?.frameColor || "#a0522d"}99` }}>Thank You</p>
+        <h2 className="font-cursive text-4xl leading-tight mb-4" style={{ color: template?.titleColor || "#4a3728" }}>Cherish the Moments 💖</h2>
+        <div className="flex items-center justify-center gap-3 my-5">
+          <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+          <Star className="w-4 h-4" style={{ color: `${template?.frameColor || "#a0522d"}80`, fill: `${template?.frameColor || "#a0522d"}40` }} />
+          <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+        </div>
+        <p className="font-serif italic text-sm text-muted-foreground leading-relaxed">Memories that last forever, friendships that never fade.</p>
+        <p className="font-display text-xs text-muted-foreground/60 mt-8 tracking-wider">Created with ✨ Memorie</p>
+      </motion.div>
+    </div>
+  );
+};
 
 /* ─── Main Component ─── */
 const GeneratePage = () => {
@@ -444,6 +448,11 @@ const GeneratePage = () => {
   const [customCoverUrl, setCustomCoverUrl] = useState<string | null>(null);
   const [uploadingCover, setUploadingCover] = useState(false);
   const coverInputRef = useRef<HTMLInputElement>(null);
+  const [backCoverMode, setBackCoverMode] = useState<"design" | "custom">("design");
+  const [selectedBackCover, setSelectedBackCover] = useState("classic-navy");
+  const [customBackCoverUrl, setCustomBackCoverUrl] = useState<string | null>(null);
+  const [uploadingBackCover, setUploadingBackCover] = useState(false);
+  const backCoverInputRef = useRef<HTMLInputElement>(null);
 
   const enabledSections = sections.filter((s) => s.enabled);
 
@@ -489,6 +498,32 @@ const GeneratePage = () => {
     } finally {
       setUploadingCover(false);
       if (coverInputRef.current) coverInputRef.current.value = "";
+    }
+  };
+
+  const getActiveBackCoverImage = () => {
+    if (backCoverMode === "custom" && customBackCoverUrl) return customBackCoverUrl;
+    return COVER_DESIGNS.find((c) => c.id === selectedBackCover)?.src || COVER_DESIGNS[0].src;
+  };
+
+  const handleBackCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploadingBackCover(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${user.id}/back-cover-${Date.now()}.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("yearbook-uploads").upload(path, file);
+      if (uploadErr) throw uploadErr;
+      const { data: urlData } = supabase.storage.from("yearbook-uploads").getPublicUrl(path);
+      setCustomBackCoverUrl(urlData.publicUrl);
+      setBackCoverMode("custom");
+      toast({ title: "Back cover uploaded! 🎨", description: "Your custom back cover is ready." });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err?.message || "Could not upload back cover.", variant: "destructive" });
+    } finally {
+      setUploadingBackCover(false);
+      if (backCoverInputRef.current) backCoverInputRef.current.value = "";
     }
   };
 
@@ -606,14 +641,16 @@ const GeneratePage = () => {
           </div>`;
       }
       if (page.type === "back-cover") {
+        const bci = getActiveBackCoverImage();
         return `
-          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:${t.coverBg};text-align:center;">
-            <div style="border:2px solid ${t.frameColor}44;border-radius:24px;padding:48px 40px;background:rgba(255,255,255,0.4);backdrop-filter:blur(8px);max-width:380px;">
-              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:${t.frameColor}aa;margin-bottom:24px;">Thank You</p>
-              <h2 style="font-family:'Dancing Script',cursive;font-size:40px;color:${t.titleColor};margin:0 0 16px;">Cherish the Moments 💖</h2>
-              <div style="width:40px;height:1px;background:${t.frameColor};margin:20px auto;"></div>
-              <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:#888;line-height:1.8;">Memories that last forever, friendships that never fade.</p>
-              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#bbb;margin-top:32px;">Created with ✨ Memorie</p>
+          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:url('${bci}') center/cover no-repeat, ${t.coverBg};text-align:center;position:relative;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45),rgba(0,0,0,0.1),transparent);"></div>
+            <div style="position:relative;z-index:1;border:2px solid rgba(255,255,255,0.3);border-radius:24px;padding:48px 40px;background:rgba(255,255,255,0.2);backdrop-filter:blur(8px);max-width:380px;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:24px;">Thank You</p>
+              <h2 style="font-family:'Dancing Script',cursive;font-size:40px;color:white;margin:0 0 16px;text-shadow:0 2px 12px rgba(0,0,0,0.3);">Cherish the Moments 💖</h2>
+              <div style="width:40px;height:1px;background:rgba(255,255,255,0.5);margin:20px auto;"></div>
+              <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.8;">Memories that last forever, friendships that never fade.</p>
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:32px;">Created with ✨ Memorie</p>
             </div>
           </div>`;
       }
@@ -798,6 +835,89 @@ const GeneratePage = () => {
                   )}
                 </div>
 
+                {/* Back Cover Image Selection */}
+                <div>
+                  <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <ImagePlus className="w-5 h-5 text-primary" /> Back Cover Image
+                  </h3>
+
+                  <div className="flex gap-2 mb-4">
+                    <button
+                      onClick={() => setBackCoverMode("design")}
+                      className={`px-4 py-2 rounded-lg text-sm font-display font-medium transition-all ${
+                        backCoverMode === "design" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      Pre-designed Covers
+                    </button>
+                    <button
+                      onClick={() => setBackCoverMode("custom")}
+                      className={`px-4 py-2 rounded-lg text-sm font-display font-medium transition-all ${
+                        backCoverMode === "custom" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      Upload Your Own
+                    </button>
+                  </div>
+
+                  {backCoverMode === "design" ? (
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                      {COVER_DESIGNS.map((cover) => (
+                        <button
+                          key={cover.id}
+                          onClick={() => setSelectedBackCover(cover.id)}
+                          className={`relative rounded-xl border-2 overflow-hidden transition-all aspect-[3/4] ${
+                            selectedBackCover === cover.id
+                              ? "border-primary shadow-primary-glow scale-[1.03]"
+                              : "border-border hover:border-primary/30"
+                          }`}
+                        >
+                          <img src={cover.src} alt={cover.name} className="w-full h-full object-cover" />
+                          {selectedBackCover === cover.id && (
+                            <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                              <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
+                            </div>
+                          )}
+                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                            <p className="text-[10px] text-white font-display font-medium leading-tight">{cover.name}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {customBackCoverUrl ? (
+                        <div className="relative inline-block">
+                          <img src={customBackCoverUrl} alt="Custom back cover" className="w-48 aspect-[3/4] object-cover rounded-xl border-2 border-primary shadow-primary-glow" />
+                          <button
+                            onClick={() => { setCustomBackCoverUrl(null); setBackCoverMode("design"); }}
+                            className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => backCoverInputRef.current?.click()}
+                          disabled={uploadingBackCover}
+                          className="flex flex-col items-center justify-center w-48 aspect-[3/4] rounded-xl border-2 border-dashed border-border hover:border-primary/40 bg-muted/30 transition-all cursor-pointer"
+                        >
+                          {uploadingBackCover ? (
+                            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                          ) : (
+                            <>
+                              <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                              <p className="text-sm font-display text-muted-foreground">Upload Back Cover</p>
+                              <p className="text-xs text-muted-foreground/60 mt-1">JPG, PNG up to 10MB</p>
+                            </>
+                          )}
+                        </button>
+                      )}
+                      <input ref={backCoverInputRef} type="file" accept="image/*" className="hidden" onChange={handleBackCoverUpload} />
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <h3 className="font-display font-semibold text-foreground mb-4">Section Summary</h3>
                   <div className="grid gap-3">
@@ -892,7 +1012,7 @@ const GeneratePage = () => {
                         {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "gallery" && <GalleryPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "qr" && <QRPage page={pages[currentPage]} flipbookUrl={flipbookUrl} template={template} />}
-                        {pages[currentPage]?.type === "back-cover" && <BackCover projectName={project?.name || ""} template={template} />}
+                        {pages[currentPage]?.type === "back-cover" && <BackCover projectName={project?.name || ""} template={template} backCoverImage={getActiveBackCoverImage()} />}
                       </motion.div>
                     </AnimatePresence>
                   </div>

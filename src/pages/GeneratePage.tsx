@@ -641,14 +641,16 @@ const GeneratePage = () => {
           </div>`;
       }
       if (page.type === "back-cover") {
+        const bci = getActiveBackCoverImage();
         return `
-          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:${t.coverBg};text-align:center;">
-            <div style="border:2px solid ${t.frameColor}44;border-radius:24px;padding:48px 40px;background:rgba(255,255,255,0.4);backdrop-filter:blur(8px);max-width:380px;">
-              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:${t.frameColor}aa;margin-bottom:24px;">Thank You</p>
-              <h2 style="font-family:'Dancing Script',cursive;font-size:40px;color:${t.titleColor};margin:0 0 16px;">Cherish the Moments 💖</h2>
-              <div style="width:40px;height:1px;background:${t.frameColor};margin:20px auto;"></div>
-              <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:#888;line-height:1.8;">Memories that last forever, friendships that never fade.</p>
-              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#bbb;margin-top:32px;">Created with ✨ Memorie</p>
+          <div class="page" style="display:flex;flex-direction:column;align-items:center;justify-content:center;background:url('${bci}') center/cover no-repeat, ${t.coverBg};text-align:center;position:relative;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45),rgba(0,0,0,0.1),transparent);"></div>
+            <div style="position:relative;z-index:1;border:2px solid rgba(255,255,255,0.3);border-radius:24px;padding:48px 40px;background:rgba(255,255,255,0.2);backdrop-filter:blur(8px);max-width:380px;">
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:24px;">Thank You</p>
+              <h2 style="font-family:'Dancing Script',cursive;font-size:40px;color:white;margin:0 0 16px;text-shadow:0 2px 12px rgba(0,0,0,0.3);">Cherish the Moments 💖</h2>
+              <div style="width:40px;height:1px;background:rgba(255,255,255,0.5);margin:20px auto;"></div>
+              <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.8;">Memories that last forever, friendships that never fade.</p>
+              <p style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:32px;">Created with ✨ Memorie</p>
             </div>
           </div>`;
       }

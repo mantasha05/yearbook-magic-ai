@@ -876,7 +876,7 @@ const GeneratePage = () => {
                         transition={{ duration: 0.45 }}
                       >
                         {pages[currentPage]?.type === "cover" && (
-                          <CoverPage projectName={project?.name || ""} batch={(project as any)?.batch} college={(project as any)?.college} template={template} images={pages[currentPage].images} />
+                          <CoverPage projectName={project?.name || ""} batch={(project as any)?.batch} college={(project as any)?.college} template={template} images={pages[currentPage].images} coverImage={getActiveCoverImage()} />
                         )}
                         {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "gallery" && <GalleryPage page={pages[currentPage]} template={template} />}

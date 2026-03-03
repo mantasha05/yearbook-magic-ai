@@ -44,6 +44,15 @@ const getSectionTagline = (title: string): string => {
   return SECTION_TAGLINES[title] || "Memories that make the heart smile 💕";
 };
 
+/* ─── Pre-designed cover images ─── */
+const COVER_DESIGNS = [
+  { id: "classic-navy", name: "Classic Navy & Gold", src: coverClassicNavy },
+  { id: "gold-geometric", name: "Gold Geometric", src: coverGoldGeometric },
+  { id: "pastel-memories", name: "Pastel Memories", src: coverPastelMemories },
+  { id: "retro-vintage", name: "Retro Vintage", src: coverRetroVintage },
+  { id: "neon-cyber", name: "Neon Cyber", src: coverNeonCyber },
+];
+
 const TEMPLATES = [
   {
     id: "modern-magazine", name: "Modern Magazine",

@@ -40,10 +40,48 @@ const getSectionTagline = (title: string): string => {
 };
 
 const TEMPLATES = [
-  { id: "modern-magazine", name: "Modern Magazine", accent: "hsl(235, 65%, 45%)", bg: "linear-gradient(135deg, #3730a3, #1e1b4b)" },
-  { id: "sparkly-memories", name: "Sparkly Memories", accent: "hsl(38, 92%, 50%)", bg: "linear-gradient(135deg, #d97706, #f59e0b)" },
-  { id: "elegant-classic", name: "Elegant Classic", accent: "hsl(0, 0%, 15%)", bg: "linear-gradient(135deg, #1f2937, #111827)" },
-  { id: "vibrant-pop", name: "Vibrant Pop", accent: "hsl(280, 70%, 50%)", bg: "linear-gradient(135deg, #7c3aed, #ec4899)" },
+  {
+    id: "modern-magazine", name: "Modern Magazine",
+    accent: "hsl(235, 65%, 45%)", bg: "linear-gradient(135deg, #3730a3, #1e1b4b)",
+    coverBg: "linear-gradient(160deg, #c7d2fe, #a5b4fc88, #e0e7ff)",
+    titleColor: "#1e1b4b", subtitleColor: "#6366f1", frameColor: "#6366f1",
+    taglineEmoji: "📘", pdfAccent: "#3730a3", pdfLight: "#e0e7ff",
+  },
+  {
+    id: "sparkly-memories", name: "Sparkly Memories",
+    accent: "hsl(38, 92%, 50%)", bg: "linear-gradient(135deg, #d97706, #f59e0b)",
+    coverBg: "linear-gradient(160deg, #fef3c7, #fde68a88, #fffbeb)",
+    titleColor: "#78350f", subtitleColor: "#d97706", frameColor: "#d97706",
+    taglineEmoji: "✨", pdfAccent: "#d97706", pdfLight: "#fef3c7",
+  },
+  {
+    id: "elegant-classic", name: "Elegant Classic",
+    accent: "hsl(0, 0%, 15%)", bg: "linear-gradient(135deg, #1f2937, #111827)",
+    coverBg: "linear-gradient(160deg, #f3f4f6, #d1d5db88, #e5e7eb)",
+    titleColor: "#111827", subtitleColor: "#6b7280", frameColor: "#374151",
+    taglineEmoji: "🖋️", pdfAccent: "#1f2937", pdfLight: "#f3f4f6",
+  },
+  {
+    id: "vibrant-pop", name: "Vibrant Pop",
+    accent: "hsl(280, 70%, 50%)", bg: "linear-gradient(135deg, #7c3aed, #ec4899)",
+    coverBg: "linear-gradient(160deg, #fce7f3, #e9d5ff88, #fdf2f8)",
+    titleColor: "#7c3aed", subtitleColor: "#ec4899", frameColor: "#a855f7",
+    taglineEmoji: "🎨", pdfAccent: "#7c3aed", pdfLight: "#fce7f3",
+  },
+  {
+    id: "retro", name: "Retro Nostalgia",
+    accent: "hsl(30, 60%, 40%)", bg: "linear-gradient(135deg, #8b4513, #d4a056)",
+    coverBg: "linear-gradient(160deg, #e8d5b7, #d4a05688, #f5e6d3)",
+    titleColor: "#4a3728", subtitleColor: "#8b4513", frameColor: "#a0522d",
+    taglineEmoji: "📷", pdfAccent: "#8b4513", pdfLight: "#e8d5b7",
+  },
+  {
+    id: "neon", name: "Neon Nights",
+    accent: "hsl(160, 100%, 50%)", bg: "linear-gradient(135deg, #0d0d1a, #00ff88)",
+    coverBg: "linear-gradient(160deg, #1a1a2e, #16213e88, #0f3460)",
+    titleColor: "#00ff88", subtitleColor: "#ff0088", frameColor: "#00ff88",
+    taglineEmoji: "⚡", pdfAccent: "#00ff88", pdfLight: "#1a1a2e",
+  },
 ];
 
 /* ─── Floating decorative element ─── */

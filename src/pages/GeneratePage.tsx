@@ -369,6 +369,14 @@ const GeneratePage = () => {
 
   const enabledSections = sections.filter((s) => s.enabled);
 
+  // Sync template from project DB
+  useEffect(() => {
+    if (project?.template) {
+      const exists = TEMPLATES.find((t) => t.id === project.template);
+      if (exists) setSelectedTemplate(project.template);
+    }
+  }, [project]);
+
   useEffect(() => {
     if (!user) return;
     const load = async () => {

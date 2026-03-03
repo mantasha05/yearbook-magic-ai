@@ -162,18 +162,18 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7 }}
       >
-        <p className="font-display text-xs tracking-[0.35em] uppercase text-pastel-rose/70 mb-3">
+        <p className="font-display text-xs tracking-[0.35em] uppercase mb-3" style={{ color: template?.subtitleColor || "#ad6b8d" }}>
           {batch ? `Class of ${batch}` : college || "Class of 2026"}
         </p>
-        <h1 className="font-cursive text-4xl sm:text-5xl text-foreground drop-shadow-sm leading-tight mb-3">
+        <h1 className="font-cursive text-4xl sm:text-5xl drop-shadow-sm leading-tight mb-3" style={{ color: template?.titleColor || "#333" }}>
           {projectName || "Our School Memories"}
         </h1>
         <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="w-12 h-px bg-pastel-gold-frame/50" />
-          <Heart className="w-4 h-4 text-pastel-rose fill-pastel-rose/40" />
-          <div className="w-12 h-px bg-pastel-gold-frame/50" />
+          <div className="w-12 h-px" style={{ background: `${template?.frameColor || "#d4a574"}80` }} />
+          <Heart className="w-4 h-4" style={{ color: template?.subtitleColor || "#ad6b8d" }} />
+          <div className="w-12 h-px" style={{ background: `${template?.frameColor || "#d4a574"}80` }} />
         </div>
-        <p className="font-serif italic text-sm text-muted-foreground">Cherish Every Moment 💕</p>
+        <p className="font-serif italic text-sm text-muted-foreground">Cherish Every Moment {template?.taglineEmoji || "💕"}</p>
       </motion.div>
     </div>
   );

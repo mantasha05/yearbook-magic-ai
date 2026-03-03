@@ -110,7 +110,9 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.7 }}
       >
-        <p className="font-display text-xs tracking-[0.35em] uppercase text-pastel-rose/70 mb-3">Class of 2026</p>
+        <p className="font-display text-xs tracking-[0.35em] uppercase text-pastel-rose/70 mb-3">
+          {batch ? `Class of ${batch}` : college || "Class of 2026"}
+        </p>
         <h1 className="font-cursive text-4xl sm:text-5xl text-foreground drop-shadow-sm leading-tight mb-3">
           {projectName || "Our School Memories"}
         </h1>

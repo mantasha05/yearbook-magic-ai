@@ -85,14 +85,14 @@ const TEMPLATES = [
 ];
 
 /* ─── Floating decorative element ─── */
-const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3 }: { icon: any; delay: number; x: string; y: string; size?: number }) => (
+const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3, color }: { icon: any; delay: number; x: string; y: string; size?: number; color?: string }) => (
   <motion.div
     className="absolute pointer-events-none"
     style={{ top: y, left: x }}
     animate={{ y: [0, -10, 0], opacity: [0.25, 0.6, 0.25], scale: [0.85, 1.15, 0.85] }}
     transition={{ duration: 3.5 + delay, repeat: Infinity, ease: "easeInOut", delay }}
   >
-    <Icon className={`w-${size} h-${size} text-pastel-rose/50 fill-pastel-rose/25`} />
+    <Icon className={`w-${size} h-${size}`} style={{ color: color ? `${color}80` : undefined, fill: color ? `${color}40` : undefined }} />
   </motion.div>
 );
 
@@ -180,24 +180,24 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
 };
 
 /* ─── Principal's Message Page ─── */
-const PrincipalPage = ({ page }: { page: any }) => (
-  <div className="relative min-h-[480px] p-6 sm:p-10 flex flex-col sm:flex-row items-center gap-8" style={{ background: "linear-gradient(145deg, hsl(var(--pastel-cream) / 0.5), hsl(var(--pastel-lavender) / 0.2))" }}>
-    <FloatingDeco icon={Star} delay={0} x="90%" y="10%" />
-    <FloatingDeco icon={Sparkles} delay={0.7} x="5%" y="85%" />
+const PrincipalPage = ({ page, template }: { page: any; template: any }) => (
+  <div className="relative min-h-[480px] p-6 sm:p-10 flex flex-col sm:flex-row items-center gap-8" style={{ background: `linear-gradient(145deg, ${template?.pdfLight || "#f5e6d3"}88, ${template?.pdfLight || "#e8d5b7"}33)` }}>
+    <FloatingDeco icon={Star} delay={0} x="90%" y="10%" color={template?.frameColor} />
+    <FloatingDeco icon={Sparkles} delay={0.7} x="5%" y="85%" color={template?.frameColor} />
 
-    {/* Photo in oval gold frame */}
+    {/* Photo in oval frame */}
     <motion.div
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.6 }}
       className="flex-shrink-0"
     >
-      <div className="w-40 h-48 sm:w-48 sm:h-56 rounded-[50%] p-[4px] bg-gradient-to-br from-pastel-gold-frame via-pastel-gold-frame/60 to-pastel-cream shadow-pastel-lg">
+      <div className="w-40 h-48 sm:w-48 sm:h-56 rounded-[50%] p-[4px] shadow-lg" style={{ background: `linear-gradient(135deg, ${template?.frameColor || "#a0522d"}, ${template?.frameColor || "#a0522d"}99, ${template?.pdfLight || "#e8d5b7"})` }}>
         {page.images[0] ? (
           <img src={page.images[0].public_url} alt="Principal" className="w-full h-full object-cover rounded-[50%]" />
         ) : (
-          <div className="w-full h-full rounded-[50%] bg-pastel-cream flex items-center justify-center">
-            <Mail className="w-10 h-10 text-pastel-gold-frame/60" />
+          <div className="w-full h-full rounded-[50%] flex items-center justify-center" style={{ background: template?.pdfLight || "#e8d5b7" }}>
+            <Mail className="w-10 h-10" style={{ color: `${template?.frameColor || "#a0522d"}99` }} />
           </div>
         )}
       </div>
@@ -210,21 +210,21 @@ const PrincipalPage = ({ page }: { page: any }) => (
       transition={{ delay: 0.3, duration: 0.6 }}
       className="flex-1 space-y-4"
     >
-      <h2 className="font-cursive text-3xl text-pastel-rose">
+      <h2 className="font-cursive text-3xl" style={{ color: template?.subtitleColor || "#8b4513" }}>
         {page.title} 💖
       </h2>
-      <div className="relative p-5 rounded-2xl bg-white/70 backdrop-blur-sm border border-pastel-gold-frame/20 shadow-pastel">
-        <div className="absolute -top-3 left-6 text-4xl text-pastel-gold-frame/40 font-serif">"</div>
+      <div className="relative p-5 rounded-2xl bg-white/70 backdrop-blur-sm shadow-md" style={{ borderLeft: `4px solid ${template?.frameColor || "#a0522d"}44` }}>
+        <div className="absolute -top-3 left-6 text-4xl font-serif" style={{ color: `${template?.frameColor || "#a0522d"}66` }}>"</div>
         <div
           className="font-serif text-lg sm:text-xl text-foreground/80 leading-relaxed italic"
           dangerouslySetInnerHTML={{ __html: page.content?.richText || "<p>Dear Students, Dream big and shine bright! Your journey is just beginning. 💖</p>" }}
         />
-        <div className="absolute -bottom-3 right-6 text-4xl text-pastel-gold-frame/40 font-serif">"</div>
+        <div className="absolute -bottom-3 right-6 text-4xl font-serif" style={{ color: `${template?.frameColor || "#a0522d"}66` }}>"</div>
       </div>
       <div className="flex items-center gap-2">
         {[...Array(3)].map((_, i) => (
           <motion.div key={i} animate={{ y: [0, -3, 0] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}>
-            <Star className="w-3 h-3 text-pastel-gold-frame/50 fill-pastel-gold-frame/30" />
+            <Star className="w-3 h-3" style={{ color: `${template?.frameColor || "#a0522d"}80`, fill: `${template?.frameColor || "#a0522d"}50` }} />
           </motion.div>
         ))}
       </div>
@@ -234,19 +234,19 @@ const PrincipalPage = ({ page }: { page: any }) => (
 
 /* ─── Dreamy Gallery Page ─── */
 const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
-  <div className="relative min-h-[480px] p-4 sm:p-6" style={{ background: "linear-gradient(160deg, hsl(var(--pastel-pink) / 0.15), hsl(var(--pastel-lavender) / 0.1), hsl(var(--pastel-cream) / 0.3))" }}>
+  <div className="relative min-h-[480px] p-4 sm:p-6" style={{ background: `linear-gradient(160deg, ${template?.pdfLight || "#e8d5b7"}22, ${template?.pdfLight || "#e8d5b7"}11, white)` }}>
     {/* Floating elements */}
     {[...Array(5)].map((_, i) => (
-      <FloatingDeco key={i} icon={i % 2 === 0 ? Heart : Sparkles} delay={i * 0.4} x={`${8 + i * 20}%`} y={`${10 + (i * 18) % 60}%`} />
+      <FloatingDeco key={i} icon={i % 2 === 0 ? Heart : Sparkles} delay={i * 0.4} x={`${8 + i * 20}%`} y={`${10 + (i * 18) % 60}%`} color={template?.frameColor} />
     ))}
 
     {/* Section title */}
     <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6">
       <h2 className="font-cursive text-3xl sm:text-4xl drop-shadow-sm" style={{ color: template?.subtitleColor || "#ad6b8d" }}>{page.title}</h2>
       <div className="flex items-center justify-center gap-2 mt-2">
-        <div className="w-10 h-px bg-pastel-gold-frame/40" />
-        <span className="text-pastel-gold-frame text-xs">✨</span>
-        <div className="w-10 h-px bg-pastel-gold-frame/40" />
+        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#d4a574"}66` }} />
+        <span style={{ color: template?.frameColor || "#d4a574" }} className="text-xs">✨</span>
+        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#d4a574"}66` }} />
       </div>
     </motion.div>
 
@@ -276,8 +276,8 @@ const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
             transition={{ duration: 0.7, delay: idx * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
             <div
-              className="relative h-full rounded-2xl p-[3px] bg-gradient-to-br from-pastel-gold-frame/60 via-white to-pastel-pink/40 shadow-pastel hover:shadow-pastel-lg transition-all duration-700 ease-out hover:-translate-y-2"
-              style={{ transform: `rotate(${rotation}deg)` }}
+              className="relative h-full rounded-2xl p-[3px] shadow-md hover:shadow-lg transition-all duration-700 ease-out hover:-translate-y-2"
+              style={{ transform: `rotate(${rotation}deg)`, background: `linear-gradient(135deg, ${template?.frameColor || "#a0522d"}99, white, ${template?.pdfLight || "#e8d5b7"}66)` }}
             >
               <div className="relative h-full rounded-[14px] overflow-hidden bg-white p-1.5">
                 <img
@@ -285,18 +285,17 @@ const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
                   alt={img.file_name}
                   className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
-                {/* Hover overlay */}
                 <div className="absolute inset-1.5 rounded-xl bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
             </div>
 
-            {/* Caption */}
             {img.caption && (
               <motion.p
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.12 + 0.3 }}
-                className="absolute -bottom-9 left-1 right-1 text-center font-cursive text-lg sm:text-xl text-pastel-rose drop-shadow-sm leading-snug z-10"
+                className="absolute -bottom-9 left-1 right-1 text-center font-cursive text-lg sm:text-xl drop-shadow-sm leading-snug z-10"
+                style={{ color: template?.subtitleColor || "#ad6b8d" }}
               >
                 {img.caption} 💕
               </motion.p>
@@ -314,7 +313,7 @@ const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
         transition={{ delay: 0.9, duration: 0.6 }}
         className="flex justify-center mt-14 pt-2"
       >
-        <p className="font-cursive text-2xl sm:text-3xl text-pastel-rose/80 text-center leading-relaxed drop-shadow-md">
+        <p className="font-cursive text-2xl sm:text-3xl text-center leading-relaxed drop-shadow-md" style={{ color: `${template?.subtitleColor || "#ad6b8d"}cc` }}>
           {getSectionTagline(page.title)}
         </p>
       </motion.div>
@@ -323,23 +322,23 @@ const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
 );
 
 /* ─── QR Code Page ─── */
-const QRPage = ({ page, flipbookUrl }: { page: any; flipbookUrl: string }) => (
-  <div className="relative min-h-[480px] flex flex-col items-center justify-center p-8" style={{ background: "linear-gradient(160deg, hsl(var(--pastel-cream) / 0.5), hsl(var(--pastel-lavender) / 0.3))" }}>
-    <FloatingDeco icon={Heart} delay={0} x="15%" y="20%" />
-    <FloatingDeco icon={Sparkles} delay={0.8} x="80%" y="25%" />
-    <FloatingDeco icon={Star} delay={1.2} x="10%" y="75%" />
+const QRPage = ({ page, flipbookUrl, template }: { page: any; flipbookUrl: string; template: any }) => (
+  <div className="relative min-h-[480px] flex flex-col items-center justify-center p-8" style={{ background: `linear-gradient(160deg, ${template?.pdfLight || "#e8d5b7"}88, ${template?.pdfLight || "#e8d5b7"}44)` }}>
+    <FloatingDeco icon={Heart} delay={0} x="15%" y="20%" color={template?.frameColor} />
+    <FloatingDeco icon={Sparkles} delay={0.8} x="80%" y="25%" color={template?.frameColor} />
+    <FloatingDeco icon={Star} delay={1.2} x="10%" y="75%" color={template?.frameColor} />
 
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-6">
-      <h2 className="font-cursive text-3xl text-pastel-rose">{page.title}</h2>
+      <h2 className="font-cursive text-3xl" style={{ color: template?.subtitleColor || "#8b4513" }}>{page.title}</h2>
       <p className="font-serif italic text-muted-foreground text-sm">Scan to Access Full Magazine Online 📱</p>
 
-      <div className="inline-block p-6 rounded-3xl bg-white shadow-pastel-lg border border-pastel-gold-frame/20">
+      <div className="inline-block p-6 rounded-3xl bg-white shadow-lg" style={{ border: `2px solid ${template?.frameColor || "#a0522d"}33` }}>
         <QRCodeSVG
           value={page.content?.anthemUrl || flipbookUrl}
           size={180}
           level="H"
           includeMargin
-          fgColor="hsl(235, 30%, 12%)"
+          fgColor={template?.titleColor || "hsl(235, 30%, 12%)"}
         />
       </div>
 
@@ -348,11 +347,11 @@ const QRPage = ({ page, flipbookUrl }: { page: any; flipbookUrl: string }) => (
       )}
 
       <div className="pt-4">
-        <p className="font-cursive text-xl text-pastel-gold-frame/70">Thanks for Reading! 💖</p>
+        <p className="font-cursive text-xl" style={{ color: `${template?.frameColor || "#a0522d"}bb` }}>Thanks for Reading! 💖</p>
         <div className="flex justify-center gap-2 mt-3">
           {[...Array(3)].map((_, i) => (
             <motion.span key={i} animate={{ y: [0, -5, 0], opacity: [0.4, 1, 0.4] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}>
-              <Heart className="w-3.5 h-3.5 text-pastel-rose/50 fill-pastel-rose/30" />
+              <Heart className="w-3.5 h-3.5" style={{ color: `${template?.subtitleColor || "#8b4513"}80`, fill: `${template?.subtitleColor || "#8b4513"}50` }} />
             </motion.span>
           ))}
         </div>
@@ -362,8 +361,8 @@ const QRPage = ({ page, flipbookUrl }: { page: any; flipbookUrl: string }) => (
 );
 
 /* ─── Back Cover ─── */
-const BackCover = ({ projectName }: { projectName: string }) => (
-  <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: "linear-gradient(180deg, hsl(var(--pastel-cream)), hsl(var(--pastel-pink) / 0.4), hsl(var(--pastel-lavender) / 0.3))" }}>
+const BackCover = ({ projectName, template }: { projectName: string; template: any }) => (
+  <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(180deg, #e8d5b7, #d4a05666, #f5e6d366)" }}>
     {/* Soft bokeh */}
     {[...Array(5)].map((_, i) => (
       <motion.div
@@ -374,31 +373,31 @@ const BackCover = ({ projectName }: { projectName: string }) => (
           height: 60 + i * 30,
           top: `${20 + i * 15}%`,
           left: `${10 + i * 18}%`,
-          background: `radial-gradient(circle, hsl(var(--pastel-gold-frame) / 0.12), transparent)`,
+          background: `radial-gradient(circle, ${template?.frameColor || "#a0522d"}1e, transparent)`,
         }}
         animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
         transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
       />
     ))}
 
-    <FloatingDeco icon={Heart} delay={0} x="10%" y="25%" size={4} />
-    <FloatingDeco icon={Sparkles} delay={1} x="85%" y="30%" />
+    <FloatingDeco icon={Heart} delay={0} x="10%" y="25%" size={4} color={template?.frameColor} />
+    <FloatingDeco icon={Sparkles} delay={1} x="85%" y="30%" color={template?.frameColor} />
 
-    {/* Golden frame border */}
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.7 }}
-      className="relative z-10 text-center px-10 py-12 rounded-3xl border-2 border-pastel-gold-frame/30 bg-white/40 backdrop-blur-sm shadow-pastel-lg max-w-sm mx-auto"
+      className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/40 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
+      style={{ border: `2px solid ${template?.frameColor || "#a0522d"}44` }}
     >
-      <p className="font-display text-xs tracking-[0.3em] uppercase text-pastel-gold-frame/60 mb-6">Thank You</p>
-      <h2 className="font-cursive text-4xl text-foreground leading-tight mb-4">
+      <p className="font-display text-xs tracking-[0.3em] uppercase mb-6" style={{ color: `${template?.frameColor || "#a0522d"}99` }}>Thank You</p>
+      <h2 className="font-cursive text-4xl leading-tight mb-4" style={{ color: template?.titleColor || "#4a3728" }}>
         Cherish the Moments 💖
       </h2>
       <div className="flex items-center justify-center gap-3 my-5">
-        <div className="w-10 h-px bg-pastel-gold-frame/40" />
-        <Star className="w-4 h-4 text-pastel-gold-frame/50 fill-pastel-gold-frame/25" />
-        <div className="w-10 h-px bg-pastel-gold-frame/40" />
+        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+        <Star className="w-4 h-4" style={{ color: `${template?.frameColor || "#a0522d"}80`, fill: `${template?.frameColor || "#a0522d"}40` }} />
+        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
       </div>
       <p className="font-serif italic text-sm text-muted-foreground leading-relaxed">
         Memories that last forever, friendships that never fade.
@@ -723,9 +722,9 @@ const GeneratePage = () => {
                 {/* Flipbook viewer */}
                 <div className="relative bg-card border border-border rounded-2xl shadow-elevated overflow-hidden">
                   {/* Header bar */}
-                  <div className="p-4 flex items-center justify-between bg-gradient-to-r from-pastel-pink/30 via-pastel-lavender/20 to-pastel-cream/30 border-b border-border">
+                  <div className="p-4 flex items-center justify-between border-b border-border" style={{ background: `linear-gradient(90deg, ${template.pdfLight}44, ${template.pdfLight}22, ${template.pdfLight}44)` }}>
                     <div className="flex items-center gap-2">
-                      <Heart className="w-4 h-4 text-pastel-rose/60 fill-pastel-rose/30" />
+                      <Heart className="w-4 h-4" style={{ color: `${template.subtitleColor}99`, fill: `${template.subtitleColor}50` }} />
                       <h3 className="font-cursive text-lg text-foreground">{pages[currentPage]?.title}</h3>
                     </div>
                     <span className="text-xs text-muted-foreground font-display">Page {currentPage + 1} of {pages.length}</span>
@@ -744,10 +743,10 @@ const GeneratePage = () => {
                         {pages[currentPage]?.type === "cover" && (
                           <CoverPage projectName={project?.name || ""} batch={(project as any)?.batch} college={(project as any)?.college} template={template} images={pages[currentPage].images} />
                         )}
-                        {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} />}
+                        {pages[currentPage]?.type === "message" && <PrincipalPage page={pages[currentPage]} template={template} />}
                         {pages[currentPage]?.type === "gallery" && <GalleryPage page={pages[currentPage]} template={template} />}
-                        {pages[currentPage]?.type === "qr" && <QRPage page={pages[currentPage]} flipbookUrl={flipbookUrl} />}
-                        {pages[currentPage]?.type === "back-cover" && <BackCover projectName={project?.name || ""} />}
+                        {pages[currentPage]?.type === "qr" && <QRPage page={pages[currentPage]} flipbookUrl={flipbookUrl} template={template} />}
+                        {pages[currentPage]?.type === "back-cover" && <BackCover projectName={project?.name || ""} template={template} />}
                       </motion.div>
                     </AnimatePresence>
                   </div>
@@ -759,7 +758,7 @@ const GeneratePage = () => {
                     </Button>
                     <div className="flex gap-1.5">
                       {pages.map((_, i) => (
-                        <button key={i} onClick={() => setCurrentPage(i)} className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentPage ? "bg-pastel-rose" : "bg-border"}`} />
+                        <button key={i} onClick={() => setCurrentPage(i)} className={`w-2.5 h-2.5 rounded-full transition-colors ${i === currentPage ? "" : "bg-border"}`} style={i === currentPage ? { background: template.subtitleColor } : {}} />
                       ))}
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => setCurrentPage((p) => Math.min(pages.length - 1, p + 1))} disabled={currentPage === pages.length - 1} className="font-display">

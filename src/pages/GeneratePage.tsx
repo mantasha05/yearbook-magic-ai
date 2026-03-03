@@ -381,53 +381,57 @@ const QRPage = ({ page, flipbookUrl, template }: { page: any; flipbookUrl: strin
 );
 
 /* ─── Back Cover ─── */
-const BackCover = ({ projectName, template }: { projectName: string; template: any }) => (
-  <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(180deg, #e8d5b7, #d4a05666, #f5e6d366)" }}>
-    {/* Soft bokeh */}
-    {[...Array(5)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute rounded-full"
-        style={{
-          width: 60 + i * 30,
-          height: 60 + i * 30,
-          top: `${20 + i * 15}%`,
-          left: `${10 + i * 18}%`,
-          background: `radial-gradient(circle, ${template?.frameColor || "#a0522d"}1e, transparent)`,
-        }}
-        animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }}
-        transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
-      />
-    ))}
-
-    <FloatingDeco icon={Heart} delay={0} x="10%" y="25%" size={4} color={template?.frameColor} />
-    <FloatingDeco icon={Sparkles} delay={1} x="85%" y="30%" color={template?.frameColor} />
-
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.7 }}
-      className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/40 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
-      style={{ border: `2px solid ${template?.frameColor || "#a0522d"}44` }}
-    >
-      <p className="font-display text-xs tracking-[0.3em] uppercase mb-6" style={{ color: `${template?.frameColor || "#a0522d"}99` }}>Thank You</p>
-      <h2 className="font-cursive text-4xl leading-tight mb-4" style={{ color: template?.titleColor || "#4a3728" }}>
-        Cherish the Moments 💖
-      </h2>
-      <div className="flex items-center justify-center gap-3 my-5">
-        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
-        <Star className="w-4 h-4" style={{ color: `${template?.frameColor || "#a0522d"}80`, fill: `${template?.frameColor || "#a0522d"}40` }} />
-        <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+const BackCover = ({ projectName, template, backCoverImage }: { projectName: string; template: any; backCoverImage?: string }) => {
+  if (backCoverImage) {
+    return (
+      <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl">
+        <img src={backCoverImage} alt="Back cover" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        <motion.div
+          className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/20 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
+          style={{ border: `2px solid rgba(255,255,255,0.3)` }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <p className="font-display text-xs tracking-[0.3em] uppercase mb-6 text-white/80">Thank You</p>
+          <h2 className="font-cursive text-4xl leading-tight mb-4 text-white drop-shadow-lg">Cherish the Moments 💖</h2>
+          <div className="flex items-center justify-center gap-3 my-5">
+            <div className="w-10 h-px bg-white/50" />
+            <Star className="w-4 h-4 text-white/70" />
+            <div className="w-10 h-px bg-white/50" />
+          </div>
+          <p className="font-serif italic text-sm text-white/70 leading-relaxed">Memories that last forever, friendships that never fade.</p>
+          <p className="font-display text-xs text-white/40 mt-8 tracking-wider">Created with ✨ Memorie</p>
+        </motion.div>
       </div>
-      <p className="font-serif italic text-sm text-muted-foreground leading-relaxed">
-        Memories that last forever, friendships that never fade.
-      </p>
-      <p className="font-display text-xs text-muted-foreground/60 mt-8 tracking-wider">
-        Created with ✨ Memorie
-      </p>
-    </motion.div>
-  </div>
-);
+    );
+  }
+
+  return (
+    <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(180deg, #e8d5b7, #d4a05666, #f5e6d366)" }}>
+      {[...Array(5)].map((_, i) => (
+        <motion.div key={i} className="absolute rounded-full" style={{ width: 60 + i * 30, height: 60 + i * 30, top: `${20 + i * 15}%`, left: `${10 + i * 18}%`, background: `radial-gradient(circle, ${template?.frameColor || "#a0522d"}1e, transparent)` }}
+          animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.3, 0.15] }} transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }} />
+      ))}
+      <FloatingDeco icon={Heart} delay={0} x="10%" y="25%" size={4} color={template?.frameColor} />
+      <FloatingDeco icon={Sparkles} delay={1} x="85%" y="30%" color={template?.frameColor} />
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.7 }}
+        className="relative z-10 text-center px-10 py-12 rounded-3xl bg-white/40 backdrop-blur-sm shadow-lg max-w-sm mx-auto"
+        style={{ border: `2px solid ${template?.frameColor || "#a0522d"}44` }}>
+        <p className="font-display text-xs tracking-[0.3em] uppercase mb-6" style={{ color: `${template?.frameColor || "#a0522d"}99` }}>Thank You</p>
+        <h2 className="font-cursive text-4xl leading-tight mb-4" style={{ color: template?.titleColor || "#4a3728" }}>Cherish the Moments 💖</h2>
+        <div className="flex items-center justify-center gap-3 my-5">
+          <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+          <Star className="w-4 h-4" style={{ color: `${template?.frameColor || "#a0522d"}80`, fill: `${template?.frameColor || "#a0522d"}40` }} />
+          <div className="w-10 h-px" style={{ background: `${template?.frameColor || "#a0522d"}66` }} />
+        </div>
+        <p className="font-serif italic text-sm text-muted-foreground leading-relaxed">Memories that last forever, friendships that never fade.</p>
+        <p className="font-display text-xs text-muted-foreground/60 mt-8 tracking-wider">Created with ✨ Memorie</p>
+      </motion.div>
+    </div>
+  );
+};
 
 /* ─── Main Component ─── */
 const GeneratePage = () => {

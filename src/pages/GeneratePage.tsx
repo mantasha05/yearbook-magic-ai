@@ -645,7 +645,15 @@ const GeneratePage = () => {
       <!DOCTYPE html><html><head><title>${project?.name || "Memorie Yearbook"}</title>
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@400;500;600;700&display=swap');
-        body{margin:0;} @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 210mm; margin: 0 auto; }
+        @page { size: A4 portrait; margin: 0; }
+        @media print {
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+        .page { width: 210mm; min-height: 297mm; height: 297mm; overflow: hidden; page-break-after: always; position: relative; }
+        .page:last-child { page-break-after: auto; }
+        img { max-width: 100%; }
       </style></head><body>${pagesHtml}</body></html>
     `);
     printWindow.document.close();

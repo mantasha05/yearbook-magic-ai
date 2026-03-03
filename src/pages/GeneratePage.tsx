@@ -233,7 +233,7 @@ const PrincipalPage = ({ page }: { page: any }) => (
 );
 
 /* ─── Dreamy Gallery Page ─── */
-const GalleryPage = ({ page }: { page: any }) => (
+const GalleryPage = ({ page, template }: { page: any; template?: any }) => (
   <div className="relative min-h-[480px] p-4 sm:p-6" style={{ background: "linear-gradient(160deg, hsl(var(--pastel-pink) / 0.15), hsl(var(--pastel-lavender) / 0.1), hsl(var(--pastel-cream) / 0.3))" }}>
     {/* Floating elements */}
     {[...Array(5)].map((_, i) => (

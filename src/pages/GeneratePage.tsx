@@ -697,6 +697,90 @@ const GeneratePage = () => {
                   </div>
                 </div>
 
+                {/* Cover Image Selection */}
+                <div>
+                  <h3 className="font-display font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <ImagePlus className="w-5 h-5 text-primary" /> Front Cover Image
+                  </h3>
+
+                  {/* Toggle: Pre-designed vs Custom */}
+                  <div className="flex gap-2 mb-4">
+                    <button
+                      onClick={() => setCoverMode("design")}
+                      className={`px-4 py-2 rounded-lg text-sm font-display font-medium transition-all ${
+                        coverMode === "design" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      Pre-designed Covers
+                    </button>
+                    <button
+                      onClick={() => setCoverMode("custom")}
+                      className={`px-4 py-2 rounded-lg text-sm font-display font-medium transition-all ${
+                        coverMode === "custom" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
+                    >
+                      Upload Your Own
+                    </button>
+                  </div>
+
+                  {coverMode === "design" ? (
+                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                      {COVER_DESIGNS.map((cover) => (
+                        <button
+                          key={cover.id}
+                          onClick={() => setSelectedCover(cover.id)}
+                          className={`relative rounded-xl border-2 overflow-hidden transition-all aspect-[3/4] ${
+                            selectedCover === cover.id
+                              ? "border-primary shadow-primary-glow scale-[1.03]"
+                              : "border-border hover:border-primary/30"
+                          }`}
+                        >
+                          <img src={cover.src} alt={cover.name} className="w-full h-full object-cover" />
+                          {selectedCover === cover.id && (
+                            <div className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                              <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
+                            </div>
+                          )}
+                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                            <p className="text-[10px] text-white font-display font-medium leading-tight">{cover.name}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {customCoverUrl ? (
+                        <div className="relative inline-block">
+                          <img src={customCoverUrl} alt="Custom cover" className="w-48 aspect-[3/4] object-cover rounded-xl border-2 border-primary shadow-primary-glow" />
+                          <button
+                            onClick={() => { setCustomCoverUrl(null); setCoverMode("design"); }}
+                            className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => coverInputRef.current?.click()}
+                          disabled={uploadingCover}
+                          className="flex flex-col items-center justify-center w-48 aspect-[3/4] rounded-xl border-2 border-dashed border-border hover:border-primary/40 bg-muted/30 transition-all cursor-pointer"
+                        >
+                          {uploadingCover ? (
+                            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                          ) : (
+                            <>
+                              <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                              <p className="text-sm font-display text-muted-foreground">Upload Cover</p>
+                              <p className="text-xs text-muted-foreground/60 mt-1">JPG, PNG up to 10MB</p>
+                            </>
+                          )}
+                        </button>
+                      )}
+                      <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <h3 className="font-display font-semibold text-foreground mb-4">Section Summary</h3>
                   <div className="grid gap-3">

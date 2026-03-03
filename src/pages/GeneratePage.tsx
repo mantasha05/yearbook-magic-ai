@@ -100,7 +100,7 @@ const FloatingDeco = ({ icon: Icon, delay, x, y, size = 3 }: { icon: any; delay:
 const CoverPage = ({ projectName, batch, college, template, images }: { projectName: string; batch?: string; college?: string; template: any; images: UploadItem[] }) => {
   const coverPhotos = images.slice(0, 5);
   return (
-    <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: "linear-gradient(160deg, hsl(var(--pastel-pink)), hsl(var(--pastel-lavender) / 0.6), hsl(var(--pastel-cream)))" }}>
+    <div className="relative min-h-[520px] flex flex-col items-center justify-center overflow-hidden rounded-xl" style={{ background: template?.coverBg || "linear-gradient(160deg, hsl(var(--pastel-pink)), hsl(var(--pastel-lavender) / 0.6), hsl(var(--pastel-cream)))" }}>
       {/* Bokeh lights */}
       {[...Array(8)].map((_, i) => (
         <motion.div
@@ -111,7 +111,7 @@ const CoverPage = ({ projectName, batch, college, template, images }: { projectN
             height: 40 + i * 25,
             top: `${10 + (i * 13) % 75}%`,
             left: `${5 + (i * 17) % 85}%`,
-            background: `radial-gradient(circle, hsl(var(--pastel-gold-frame) / 0.15), transparent)`,
+            background: `radial-gradient(circle, ${template?.frameColor || "hsl(var(--pastel-gold-frame))"}22, transparent)`,
           }}
           animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 4 + i * 0.8, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}

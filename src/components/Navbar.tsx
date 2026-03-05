@@ -16,10 +16,6 @@ const Navbar = () => {
   const location = useLocation();
   const { user, signOut } = useAuth();
 
-  const handleSignOut = async () => {
-    await signOut();
-  };
-
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
@@ -58,9 +54,9 @@ const Navbar = () => {
           {user ? (
             <>
               <span className="text-sm text-muted-foreground truncate max-w-[160px]">
-                {user.email}
+                {user.name}
               </span>
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+              <Button variant="ghost" size="sm" onClick={signOut}>
                 <LogOut className="w-4 h-4 mr-1" />
                 Log out
               </Button>
@@ -68,7 +64,7 @@ const Navbar = () => {
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/login">Log in</Link>
+                <Link to="/login">Enter Name</Link>
               </Button>
               <Button size="sm" className="bg-gradient-hero shadow-primary-glow hover:opacity-90 text-primary-foreground" asChild>
                 <Link to="/login">Get Started Free</Link>
@@ -107,19 +103,14 @@ const Navbar = () => {
             ))}
             <div className="flex gap-3 pt-2 border-t border-border">
               {user ? (
-                <Button variant="ghost" size="sm" className="flex-1" onClick={handleSignOut}>
+                <Button variant="ghost" size="sm" className="flex-1" onClick={signOut}>
                   <LogOut className="w-4 h-4 mr-1" />
                   Log out
                 </Button>
               ) : (
-                <>
-                  <Button variant="ghost" size="sm" className="flex-1" asChild>
-                    <Link to="/login">Log in</Link>
-                  </Button>
-                  <Button size="sm" className="flex-1 bg-gradient-hero text-primary-foreground" asChild>
-                    <Link to="/login">Get Started</Link>
-                  </Button>
-                </>
+                <Button size="sm" className="flex-1 bg-gradient-hero text-primary-foreground" asChild>
+                  <Link to="/login">Get Started</Link>
+                </Button>
               )}
             </div>
           </div>

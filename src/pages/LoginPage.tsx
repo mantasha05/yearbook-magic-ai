@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Mail, Lock, Loader2, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
+import ForgotPasswordDialog from "@/components/ForgotPasswordDialog";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -178,6 +179,17 @@ const LoginPage = () => {
                 </button>
               </div>
             </div>
+            {!isSignUp && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setForgotOpen(true)}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
             <Button
               type="submit"
               className="w-full h-11 bg-gradient-hero shadow-primary-glow hover:opacity-90 text-primary-foreground font-display"
@@ -198,6 +210,7 @@ const LoginPage = () => {
             </button>
           </p>
         </div>
+        <ForgotPasswordDialog open={forgotOpen} onOpenChange={setForgotOpen} />
       </motion.div>
     </div>
   );

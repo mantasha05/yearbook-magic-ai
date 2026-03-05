@@ -19,16 +19,20 @@ const LoginPage = () => {
     }
   }, [user, authLoading, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) {
       toast({ title: "Please enter your name", variant: "destructive" });
       return;
     }
-    signIn(trimmed);
-    toast({ title: `Welcome, ${trimmed}!` });
-    navigate("/dashboard");
+    try {
+      await signIn(trimmed);
+      toast({ title: `Welcome, ${trimmed}!` });
+      navigate("/dashboard");
+    } catch (err: any) {
+      toast({ title: "Something went wrong", description: err.message, variant: "destructive" });
+    }
   };
 
   if (authLoading) {
